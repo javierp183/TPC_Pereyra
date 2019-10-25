@@ -1,0 +1,76 @@
+---
+application:
+  tittle: Trabajo Practico Numero 3
+  messages:
+    not_valid: Voucher is not Valid
+    voucher_need: You need a valid Voucher
+    voucher_need_and_id: You need a valid Voucher and ID
+    oops: Ops! Issue with the database connection
+
+
+framework:
+  host: 0.0.0.0
+  port: 8080
+  debug: true
+  reloader: true
+  workers: 5
+
+database:
+  debug: false
+  engine:
+    provider: sqlite
+    filename: sqlite.db
+
+loader:
+  medics:
+    speciality:
+      - pediatra
+      - ginecologo
+      - obtetra
+      - cardiologo
+    name:
+      - Santo
+      - Pepe
+    lastname:
+      - Domingo
+      - Rapo
+    medicid:
+      - 999999
+      - 888888
+  patients:
+    data:
+      dni:
+        - 31541955
+        - 31541954
+      name:
+        - Javier
+        - Pedro
+      lastname:
+        - Pereyra
+        - Pasculi
+      secureid:
+        - 'abc123456'
+        - 'abc654321'
+      email:
+        - javier.pereyra183@gmail.com
+        - pedro.zaraza@gmail.com
+  user:
+    data:
+      name:
+        - Javier
+        - Santo
+      lastname:
+        - Pereyra
+        - Domingo
+      userid:
+        - javier182
+        - santo182
+      password:
+        - abc123
+        - abc123
+      rol:
+        - patient
+        - medic
+        
+      
+    
