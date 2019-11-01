@@ -110,14 +110,6 @@ def main_doctor_index():
     pass
 
 
-@route('/useradd')
-@db_session
-@view('useradd.tpl', template_lookup=['views'])
-def main_doctor_index():
-    """ Main Index """
-    pass
-
-
 @route('/medic')
 @db_session
 @view('medic.tpl', template_lookup=['views'])
@@ -131,17 +123,34 @@ def main_doctor_index():
     return dict(context=result)
 
 
-@route('/patient')
+@route('/patient', method=["GET","POST"])
 @db_session
 @view('patient.tpl', template_lookup=['views'])
 def main_doctor_index():
     """ Patient Main Index """
+    medics_patients = []
+    medicos_pre_asignados = {}
     
     #Get Complete list of Patients
     patients = select(p for p in Patient)[:]
-    result = {'data': [p.to_dict() for p in patients]}
+    data_patient = {'patient_data': [p.to_dict() for p in patients]}
 
-    return dict(context=result)
+    #Get Complete list of Medics
+    medics = select(m for m in Medic)[:]
+    data_medic = {'medic_data': [m.to_dict() for m in medics]}
+
+
+    medics_patients.append(data_patient)
+    medics_patients.append(data_medic)
+    for i in medics_patients[0]['patient_data']:
+        for j in medics_patients[1]['medic_data']:
+            if i['medic'] == j['id']:
+                j['medicselected'] = j['name']
+                j['medic_sid'] = i['medic']
+    
+    print(medics_patients[1]['medic_data'])
+
+    return dict(context=medics_patients)
 
 
 @route('/user')
@@ -149,12 +158,13 @@ def main_doctor_index():
 @view('user.tpl', template_lookup=['views'])
 def main_doctor_index():
     """ User Main Index """
+    medics_patients = []
     
     #Get Complete list of Patients
-    users = select(p for p in User)[:]
-    result = {'data': [p.to_dict() for p in users]}
+    patients = select(p for p in Patient)[:]
+    data_patient = {'patient_data': [p.to_dict() for p in patients]}
 
-    return dict(context=result)
+    return dict(context=medics_patients)
 
 
 run(**settings['framework'])

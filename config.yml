@@ -31,12 +31,15 @@ loader:
     name:
       - Santo
       - Pepe
+      - Sancho
     lastname:
       - Domingo
       - Rapo
+      - Algo
     medicid:
       - 999999
       - 888888
+      - 777777
   patients:
     data:
       dni:

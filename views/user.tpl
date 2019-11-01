@@ -9,34 +9,37 @@
     <li><a>Search</a></li>
     <li><a>Schedule</a></li>
     <li><a>Patients</a></li>
+    <li></li>
   </ul>
 
 </nav>
 </header>
 
-<p class="center">Users currently registered</p>
 
 
-<h3></h3>
+{%for i in context.0.patient_data%}
 
-{%for i in context.data%}
 <table id="personal">
         <tr>
           <th>Name</th>
           <th>Lastname</th>
-          <th>UserID</th>
-          <th>password</th>
-          <th>rol</th>
+          <th>Secure ID</th>
+          <th>In Agenda</th>
+          <th>Patients</th>
+          <th>Speciality</th>
         </tr>
         <tr>
           <td>{{ i.name }}</td>
           <td>{{ i.lastname }}</td>
-          <td>{{ i.userid }}</td>
-          <td>{{ i.password }}</td>
-          <td>{{ i.rol }}</td>
+          <td>{{ i.secureid }} </td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </table>
 {%endfor%}
+
+
 
 
 
