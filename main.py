@@ -34,15 +34,17 @@ from pony.orm import commit,select
 
 # Framework
 from bottle import jinja2_view as view
-from bottle import request
+from bottle import request, MultiDict
 from bottle import route, run, redirect
-from bottle import static_file
+from bottle import static_file,response
+import bottle
 
 # Tables / Objects
 from database import Medic, Speciality
 from database import Agenda, Patient
 from database import User
 from loader import Loader
+from dbapp import Assignation
 
 # Datetime
 import datetime
@@ -129,7 +131,10 @@ def main_doctor_index():
 def main_doctor_index():
     """ Patient Main Index """
     medics_patients = []
-    medicos_pre_asignados = {}
+    html_table_data = {
+        'dni':[], 'name':[], 'lastname': [], 'spec_selected': [],
+        'time': []
+    }
     
     #Get Complete list of Patients
     patients = select(p for p in Patient)[:]
@@ -139,16 +144,28 @@ def main_doctor_index():
     medics = select(m for m in Medic)[:]
     data_medic = {'medic_data': [m.to_dict() for m in medics]}
 
+    #Get Complete list of specialities
+    speciality = select(s for s in Speciality)[:]
+    data_speciality = {'spec_data': [s.to_dict() for s in speciality]}
+
+    #Get Complete list of the Agenda
+    agenda = select(a for a in Agenda)[:]
+    data_agenda = {'agenda_data': [a.to_dict() for a in agenda]}
+
 
     medics_patients.append(data_patient)
     medics_patients.append(data_medic)
-    for i in medics_patients[0]['patient_data']:
-        for j in medics_patients[1]['medic_data']:
-            if i['medic'] == j['id']:
-                j['medicselected'] = j['name']
-                j['medic_sid'] = i['medic']
-    
-    print(medics_patients[1]['medic_data'])
+    medics_patients.append(data_speciality)
+    medics_patients.append(data_agenda)
+
+
+    for i in html_table_data.keys():
+        html_table_data[i] = request.GET.getall(i)
+
+    p = Assignation()
+
+    p.medicassign(html_table_data,medics_patients)
+
 
     return dict(context=medics_patients)
 

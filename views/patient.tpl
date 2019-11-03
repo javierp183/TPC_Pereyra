@@ -17,9 +17,7 @@
 
 <p class="center">Assign patient to medic</p>
 
-{%for i in context.0.patient_data%}
-{{ i }}
-{%endfor%}
+
 
 
 <form>
@@ -29,59 +27,49 @@
               <th>DNI</th>
               <th>Name</th>
               <th>Lastname</th>
-              <th>SecureID</th>
-              <th>Email</th>
-              <th>Medic</th>
+              <th>Speciality</th>
+              <th>Shift/Time</th>
             </tr> 
             
             <tr>
-                
+                {%for i in context.0.patient_data%}
               <td>
-                  {%for i in context.0.patient_data%}
+                  
                 <input type="text" name="dni" value={{ i.dni }}>
-                {%endfor%}
+                 
               </td>
+
               <td>
-                  {%for i in context.0.patient_data%}
+                  
                 <input type="text" name="name" value={{ i.name }}>
-                {%endfor%}
+                  
               </td>
+
               <td>
-                  {%for i in context.0.patient_data%}
+                  
                 <input type="text" name="lastname" value={{ i.lastname }}>
-                {%endfor%}
-              </td>
-              <td>
-                  {%for i in context.0.patient_data%}
-                  <input type="text" name="secureid" value={{ i. secureid }}>
-                  {%endfor%}
-                </td>
-              <td>
-                  {%for i in context.0.patient_data%}
-                  <input type="text" name="email" value={{ i.email }}>
-                  {%endfor%}
+                  
               </td>
               
+              
               <td>
-                  {%for i in context.0.patient_data%}
-                  <select>
-                  
-                  
-                  
-                  {%if i.medic%} <option selected="{{ i.medic }}"> {{ i.medic }} </option>{%endif%}
+                <select name="spec_selected">
+                    {%for i in context.2.spec_data%}
+                    <option value="{{ i.medic }}">{{ i. name }}</option>
+                    {%endfor%}
+                </select>
+                </td>
 
-                  {%for j in context.1.medic_data%}
-                  <option>{{ j.name }}</option>
-                  {%endfor%}
-                  
-                 
-                  
-                  
-                  </select>
-                {%endfor%}
+              <td>
+                <select name="time">
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                </select>
               </td>
+              
             </tr>
-            
+            {%endfor%}
       </table>
       <button>Submit changes</button>
 

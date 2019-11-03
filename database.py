@@ -90,10 +90,9 @@ class Agenda(db.Entity):
     id = PrimaryKey(int, auto=True)
     date = Optional(str)
     state = Optional(bool)
-    timestart = Optional(str)
-    timeend = Optional(str)
+    hour = Optional(str)
     medico = Optional(Medic)
-    cliente = Optional(Patient)
+    patient = Optional(Patient)
 
 class User(db.Entity):
     """ Users Table """
