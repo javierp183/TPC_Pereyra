@@ -5,16 +5,10 @@
 <h3>Choose user type:</h3>
 <h4>Medic, Patient or User of the App</h4><br>
 
-<table>
-    <tr>
-        <td>Medic: <input type="checkbox" value="medic"></td>
-        <td>Patient: <input type="checkbox" value="patient"></td>
-        <td>User: <input type="checkbox" value="user"></td>
-    </tr>
 
-</table>
+<form method="POST">
 
-<form>
+  
   First name:<br>
   <input type="text" name="name">
   <br>
@@ -22,7 +16,7 @@
   <input type="text" name="lastname">
   <br>
   Medic ID<br>
-  <input type="number" name="medicid">
+  <input type="text" name="medicid">
   <li>Only Medic's</li>
   <br>
   Speciality:<br>
@@ -34,6 +28,15 @@
   <br>
   Password
   <input type="password" name="password">
+  <br>
+  Medic
+  <input type="checkbox" name="medic" value=1>
+  <br>
+  Admin
+  <input type="checkbox" name="admin" value=1>
+  <br>
+  Patient
+  <input type="checkbox" name="patient" value=1>
   <br>
   <input type="submit" value="Submit">
 

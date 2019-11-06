@@ -29,14 +29,54 @@
 # --------------------------------------------------------------------------- #
 
 from database import Patient,Medic,Agenda
+from database import Speciality
+from database import User
 from pony.orm import commit
+from pony.orm import select
+
+
+class DBobjects:
+    def loadobjects(self):
+        #Declare the array
+        medics_patients = []
+
+        #Get Complete list of Patients
+        patients = select(p for p in Patient)[:]
+        data_patient = {'patient_data': [p.to_dict() for p in patients]}
+
+        #Get Complete list of Medics
+        medics = select(m for m in Medic)[:]
+        data_medic = {'medic_data': [m.to_dict() for m in medics]}
+
+        #Get Complete list of specialities
+        speciality = select(s for s in Speciality)[:]
+        data_speciality = {'spec_data': [s.to_dict() for s in speciality]}
+
+        #Get Complete list of the Agenda
+        agenda = select(a for a in Agenda)[:]
+        data_agenda = {'agenda_data': [a.to_dict() for a in agenda]}
+
+        #Append data to array
+        medics_patients.append(data_patient)
+        medics_patients.append(data_medic)
+        medics_patients.append(data_speciality)
+        medics_patients.append(data_agenda)
+
+        return medics_patients
 
 
 class Assignation:
     def medicassign(self,table_data,db_data):
         """ Medic Assignation by Specialization """
         patients = []
-        #print(table_data)
+        dayandmonth = []
+
+        d = 0
+        for i in table_data['day']:
+            dayandmonth.append(i + "-" + table_data['month'][d])
+        
+        table_data['daymonth'] = dayandmonth
+        
         
         for i in table_data['spec_selected']:
             if i != 'None':
@@ -64,22 +104,56 @@ class Assignation:
                 a.hour = table_data['time'][p]
                 a.medico = i
                 a.patient = patients[p].id
+                a.date = table_data['daymonth'][p]
             
-            #Agenda(state=1, timestart=table_data['time'][p],
-            #        medico=i,patient=patients[p].id)
             p = p + 1
             commit()
 
 
-class Usercreate:
+class Usermgmt:
     def adduser(self,data):
-        pass
+        try:
+            if data['medic']:
+                User(name=data['name'], lastname=data['lastname'],
+                    userid=data['userid'], password=data['password'],
+                    rol="medic")
+                commit()
+        except:
+            pass
+
+        try:
+            if data['admin']:
+                User(name=data['name'], lastname=data['lastname'],
+                    userid=data['userid'], password=data['password'],
+                    rol="admin")
+                commit()
+        except:
+            pass
+            
+        try:
+            if data['patient']:
+                User(name=data['name'], lastname=data['lastname'],
+                    userid=data['userid'], password=data['password'],
+                    rol="admin")
+                commit()
+        except:
+            pass
 
     def modifyuser(self,data):
         pass
 
     def deleteuser(self,data):
         pass
+
+    def validate(self, data):
+        try:
+            if User.exists(userid=data['userid']):
+                role = User.get(userid=data['userid']).rol
+                password = User.get(userid=data['userid']).password
+                if data['password'] == password:
+                    return dict({'state': True, 'rol': role})
+        except:
+            return dict({'state': False, 'rol': 'None'})
             
         
 

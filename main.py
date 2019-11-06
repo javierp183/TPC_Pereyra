@@ -44,7 +44,8 @@ from database import Medic, Speciality
 from database import Agenda, Patient
 from database import User
 from loader import Loader
-from dbapp import Assignation
+from dbapp import Assignation,Usermgmt
+from dbapp import DBobjects
 
 # Datetime
 import datetime
@@ -89,18 +90,35 @@ def complete():
 # Application Main Routes
 # --------------------------------------------------------------------------- #
 
-@route('/')
+@route('/', method=["GET","POST"])
 @db_session
 @view('index.tpl', template_lookup=['views'])
-def main_doctor_index():
+def main_index():
     """ Main Index """
-    pass
+    data = dict(request.forms)
+    access = Usermgmt()
+    if request.method == 'POST':
+        urol = access.validate(data)
+        if urol['rol'] == 'admin':
+            return redirect('/patient')
+        elif urol['rol'] == 'medic':
+            return redirect('/medic')
+        elif urol['rol'] == 'patient':
+            return redirect('/user')
+        elif urol == 'None':
+            return "Please, check the user!"
+        
 
-@route('/useradd')
+
+@route('/useradd', method=["GET","POST"])
 @db_session
 @view('useradd.tpl', template_lookup=['views'])
 def main_doctor_index():
     """ Main Index """
+    data = dict(request.forms)
+    create = Usermgmt()
+    create.adduser(data)
+
     pass
 
 
@@ -133,41 +151,19 @@ def main_doctor_index():
     medics_patients = []
     html_table_data = {
         'dni':[], 'name':[], 'lastname': [], 'spec_selected': [],
-        'time': []
+        'time': [], 'day': [], 'month': []
     }
-    
-    #Get Complete list of Patients
-    patients = select(p for p in Patient)[:]
-    data_patient = {'patient_data': [p.to_dict() for p in patients]}
-
-    #Get Complete list of Medics
-    medics = select(m for m in Medic)[:]
-    data_medic = {'medic_data': [m.to_dict() for m in medics]}
-
-    #Get Complete list of specialities
-    speciality = select(s for s in Speciality)[:]
-    data_speciality = {'spec_data': [s.to_dict() for s in speciality]}
-
-    #Get Complete list of the Agenda
-    agenda = select(a for a in Agenda)[:]
-    data_agenda = {'agenda_data': [a.to_dict() for a in agenda]}
-
-
-    medics_patients.append(data_patient)
-    medics_patients.append(data_medic)
-    medics_patients.append(data_speciality)
-    medics_patients.append(data_agenda)
-
 
     for i in html_table_data.keys():
         html_table_data[i] = request.GET.getall(i)
 
+    dbdata = DBobjects().loadobjects()
+    
     p = Assignation()
+    p.medicassign(html_table_data,dbdata)
 
-    p.medicassign(html_table_data,medics_patients)
 
-
-    return dict(context=medics_patients)
+    return dict(context=dbdata)
 
 
 @route('/user')
