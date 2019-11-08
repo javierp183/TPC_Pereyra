@@ -68,7 +68,7 @@ class Medic(db.Entity):
     name = Optional(str)
     lastname = Optional(str)
     medicid = Optional(int)
-    agenda = Optional('Agenda')
+    agenda = Set('Agenda')
     patient = Optional('Patient')
     speciality = Optional(Speciality)
 
@@ -81,8 +81,8 @@ class Patient(db.Entity):
     lastname = Optional(str)
     secureid = Optional(str)
     email = Optional(str)
-    turnos = Optional('Agenda')
-    medic = Optional('Medic')
+    turnos = Set('Agenda')
+    medic = Set('Medic')
 
 
 class Agenda(db.Entity):
@@ -101,6 +101,8 @@ class User(db.Entity):
     lastname = Optional(str)
     userid = Optional(str)
     password = Optional(str)
+    medicid = Optional(int)
+    dni = Optional(str)
     rol = Optional(str)
 
 

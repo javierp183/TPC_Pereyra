@@ -1,11 +1,6 @@
 ---
 application:
   tittle: Trabajo Practico Numero 3
-  messages:
-    not_valid: Voucher is not Valid
-    voucher_need: You need a valid Voucher
-    voucher_need_and_id: You need a valid Voucher and ID
-    oops: Ops! Issue with the database connection
 
 
 framework:
@@ -61,14 +56,17 @@ loader:
         - Pereyra
         - Domingo
       userid:
-        - javier182
         - santo182
+        - pepe182
       password:
         - abc123
         - abc123
       rol:
-        - patient
         - medic
+        - medic
+      medicid:
+        - 999999
+        - 888888
         
       
     

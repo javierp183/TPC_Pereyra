@@ -38,7 +38,7 @@ from pony.orm import select
 class DBobjects:
     def loadobjects(self):
         #Declare the array
-        medics_patients = []
+        allobjects = []
 
         #Get Complete list of Patients
         patients = select(p for p in Patient)[:]
@@ -57,57 +57,92 @@ class DBobjects:
         data_agenda = {'agenda_data': [a.to_dict() for a in agenda]}
 
         #Append data to array
-        medics_patients.append(data_patient)
-        medics_patients.append(data_medic)
-        medics_patients.append(data_speciality)
-        medics_patients.append(data_agenda)
+        allobjects.append(data_patient)
+        allobjects.append(data_medic)
+        allobjects.append(data_speciality)
+        allobjects.append(data_agenda)
 
-        return medics_patients
+        return allobjects
+        
 
 
 class Assignation:
     def medicassign(self,table_data,db_data):
         """ Medic Assignation by Specialization """
-        patients = []
-        dayandmonth = []
 
-        d = 0
-        for i in table_data['day']:
-            dayandmonth.append(i + "-" + table_data['month'][d])
-        
-        table_data['daymonth'] = dayandmonth
-        
-        
-        for i in table_data['spec_selected']:
-            if i != 'None':
-                medic_state = True
-        
-        
-        if not db_data[3]['agenda_data']:
-            agenda_state = False
+        state = 0
 
-        
-        for i in table_data['dni']:
-            patients.append(Patient.get(dni=i))
+        table_data['daymonth'] = table_data['day'] + "-" +table_data['month']
 
-        p = 0
-        for i in table_data['spec_selected']:
-            patients[p].medic = i
-
-            if Agenda.get(hour=table_data['time'][p]) == None:
-                Agenda(state=1, hour=table_data['time'][p],
-                medico=i,patient=patients[p].id)
+        for i in db_data[3]['agenda_data']:
+            """ validate patient id with form patient id """
+            if i['patient'] == int(table_data['userdbid']) \
+                and i['medico'] == int(table_data['spec_selected']) \
+                and i['date'] == table_data['daymonth'] \
+                and i['hour'] == table_data['time']:
+                state = 0
+                return state
             else:
-                print("actualizando base de datos")
-                a = Agenda.get(hour=table_data['time'][p])
-                a.state = 1
-                a.hour = table_data['time'][p]
-                a.medico = i
-                a.patient = patients[p].id
-                a.date = table_data['daymonth'][p]
-            
-            p = p + 1
-            commit()
+                state = 1
+  
+
+        if state == 1:
+            """ Adding patient if state is true """
+            Agenda(date=table_data['daymonth'], state=1,
+                    hour=table_data['time'], medico=table_data['spec_selected'],
+                    patient=table_data['userdbid'])
+        
+        return state
+
+    
+    def medicagenda(medicid,dbdata):
+        """ Obtain medic agenda information """
+        data = {
+            'patients' : {
+                'name':[],
+                'lastname':[],
+                'time':[],
+                'daymonth':[]
+            },
+            'medic':{
+                'id': '',
+                'name': '',
+                'lastname': '',
+                'patientsid': [],
+                'spec_number': '',
+                'speciality': '',
+                'medicid': ''
+            }
+        }
+
+        for i in dbdata[1]['medic_data']:
+            if i['medicid'] == int(medicid):
+                data['medic']['id'] = i['id']
+                data['medic']['name'] = i['name']
+                data['medic']['lastname'] = i['lastname']
+                data['medic']['medicid'] = int(medicid)
+                data['medic']['spec_number'] = i['speciality']
+
+
+        for i in dbdata[2]['spec_data']:
+            if i['id'] == data['medic']['spec_number']:
+                data['medic']['speciality'] = i['name']
+
+
+        for i in dbdata[3]['agenda_data']:
+            if i['medico'] == data['medic']['id']:
+                data['medic']['patientsid'].append(i['patient'])
+                data['patients']['time'].append(i['hour'])
+                data['patients']['daymonth'].append(i['date'])
+
+
+        for i in data['medic']['patientsid']:
+            for j in dbdata[0]['patient_data']:
+                if i == j['id']:
+                    data['patients']['name'].append(j['name'])
+                    data['patients']['lastname'].append(j['lastname'])
+
+        return data
 
 
 class Usermgmt:
@@ -150,11 +185,16 @@ class Usermgmt:
             if User.exists(userid=data['userid']):
                 role = User.get(userid=data['userid']).rol
                 password = User.get(userid=data['userid']).password
+
                 if data['password'] == password:
-                    return dict({'state': True, 'rol': role})
+                    return dict({'state': True, 'role': role})
         except:
             return dict({'state': False, 'rol': 'None'})
-            
-        
+    
 
-        
+    def getmedicid(self, data):
+        """ Obtain medic id number """
+        medicid = User.get(userid=data['userid']).medicid
+        return medicid
+
+

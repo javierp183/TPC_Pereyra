@@ -37,6 +37,7 @@ from bottle import jinja2_view as view
 from bottle import request, MultiDict
 from bottle import route, run, redirect
 from bottle import static_file,response
+from bottle import template
 import bottle
 
 # Tables / Objects
@@ -66,14 +67,20 @@ def server_static(filepath):
 # Function - Helpers - Render output
 # --------------------------------------------------------------------------- #
 
-@route('/validate')
-@view('validate.tpl', template_lookup=['views'])
-def error():
+@route('/medicassigned')
+@view('medic_assigned.tpl', template_lookup=['views'])
+def medic_assigned():
     pass
 
-@route('/saveuser')
-@view('thanks.tpl', template_lookup=['views'])
-def thanks():
+
+@route('/medicanonssigned')
+@view('medic_non_assigned.tpl', template_lookup=['views'])
+def medic_non_assigned():
+    pass
+
+@route('/wronguserpass')
+@view('wronguserpass.tpl', template_lookup=['views'])
+def wronguserpass():
     pass
 
 @route('/savemedic')
@@ -96,25 +103,37 @@ def complete():
 def main_index():
     """ Main Index """
     data = dict(request.forms)
+    
     access = Usermgmt()
     if request.method == 'POST':
+
         urol = access.validate(data)
-        if urol['rol'] == 'admin':
+        print(urol)
+
+        if urol['role'] == 'admin':
             return redirect('/patient')
-        elif urol['rol'] == 'medic':
-            return redirect('/medic')
-        elif urol['rol'] == 'patient':
+
+        elif urol['role'] == 'medic':
+            mid = access.getmedicid(data)
+            return redirect('/medic/{}'.format(mid))
+        
+        elif urol['role'] == 'patient':
             return redirect('/user')
-        elif urol == 'None':
-            return "Please, check the user!"
+
+        elif urol['role'] == 'None':
+            print("salida:")
+            print(urol['role'])
+            return redirect('/wronguserpass')
+        
+    return dict(context={'output': 'none'})
         
 
 
 @route('/useradd', method=["GET","POST"])
 @db_session
 @view('useradd.tpl', template_lookup=['views'])
-def main_doctor_index():
-    """ Main Index """
+def main_useradd_index():
+    """ Main UserAdd Index """
     data = dict(request.forms)
     create = Usermgmt()
     create.adduser(data)
@@ -122,45 +141,36 @@ def main_doctor_index():
     pass
 
 
-@route('/agenda')
-@db_session
-@view('index.tpl', template_lookup=['views'])
-def main_doctor_index():
-    """ Main Index """
-    pass
-
-
-@route('/medic')
+@route('/medic/<medicid>', method=["GET","POST"])
 @db_session
 @view('medic.tpl', template_lookup=['views'])
-def main_doctor_index():
+def main_doctor_index(medicid):
     """ Medic Main Index """
+    print("salida")
+    dbdata = DBobjects().loadobjects()
+    medic = Assignation.medicagenda(medicid,dbdata)
 
-    #Get Complete list of Medics
-    medics = select(m for m in Medic)[:]
-    result = {'data': [m.to_dict() for m in medics]}
+    print(dict(request.params))
 
-    return dict(context=result)
+    print(medic)
+    
+    
+    return dict(context=medic)
 
 
 @route('/patient', method=["GET","POST"])
 @db_session
 @view('patient.tpl', template_lookup=['views'])
-def main_doctor_index():
+def main_patient_index():
     """ Patient Main Index """
     medics_patients = []
-    html_table_data = {
-        'dni':[], 'name':[], 'lastname': [], 'spec_selected': [],
-        'time': [], 'day': [], 'month': []
-    }
-
-    for i in html_table_data.keys():
-        html_table_data[i] = request.GET.getall(i)
 
     dbdata = DBobjects().loadobjects()
     
-    p = Assignation()
-    p.medicassign(html_table_data,dbdata)
+    if request.method == 'POST':
+        p = Assignation()
+        p.medicassign(dict(request.forms),dbdata)
+        
 
 
     return dict(context=dbdata)

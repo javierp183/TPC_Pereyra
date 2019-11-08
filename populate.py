@@ -82,8 +82,17 @@ def user_add():
             lastname=config['loader']['user']['data']['lastname'][i],
             userid=config['loader']['user']['data']['userid'][i],
             password=config['loader']['user']['data']['password'][i],
-            rol=config['loader']['user']['data']['rol'][i])
-        commit()   
+            rol=config['loader']['user']['data']['rol'][i],
+            medicid=config['loader']['user']['data']['medicid'][i])
+        commit()
+
+
+def set_speciality():
+        a = Medic[1]
+        a.speciality = Speciality[1]
+        b = Medic[2]
+        b.speciality = Speciality[2]
+        commit()
 
 # # --------------------------------------------------------------------------- #
 # # Sample Database
