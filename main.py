@@ -172,9 +172,8 @@ def main_patient_index():
     """ operator Main Index """
 
     if request.method == 'POST':
-        print("salida del post:")
-        print(dict(request.forms))
-        #group['freetime'] = Assignation().searchfreetime(dict(request.forms),dbdata)
+        print("post")
+        Assignation().medicassign(dict(request.forms))
         pass
         
     

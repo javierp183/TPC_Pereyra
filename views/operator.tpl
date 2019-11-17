@@ -6,6 +6,7 @@
 <h1> Medical assignation </h1>
 
 
+
 <body>
   <form method="POST">
 
@@ -19,7 +20,7 @@
           </select>
 
       <em>Choose Free time</em>
-        <select class="chosen-select" tabindex="5" name="hour">
+        <select class="chosen-select" tabindex="5" name="daytimehour">
             {%for k, v in context.5.hourmedic.items()%}
             {%set time = v['hours'] %}
             {%set date = v['dates'] %}
@@ -28,8 +29,16 @@
                 {%for t in time%} <option value"{{ t }}"> Hour: {{ t }} Date: {{ date[loop.index0] }} {%endfor%} </option>  
           </optgroup>
           {%endfor%}
-          
-        </select>      
+        </select>
+        
+      <em>Choose Patient</em>
+      <select class="chosen-select" tabindex="5" name="patient">
+        {%for i in context.0.patient_data%}
+        <option>{{ i.name }} {{ i.lastname }} - {{ i.dni }}</option>
+        {%endfor%}
+
+        
+      </select>
 
   <input type="submit" value="Submit">
 

@@ -94,12 +94,44 @@ class DBobjects:
                 hourbymedic[i['name']]['dates'].append(i['date'])
 
         allobjects.append(dict(hourmedic=hourbymedic))
+
+
                 
         return allobjects
         
 
 
 class Assignation:
+    def medicassign(self,data):
+        hour = data['daytimehour'].split(":")[1].split(" ")[1]
+        date = data['daytimehour'].split(":")[2].split(" ")[1]
+        patientdni = data['patient'].split("-")[1]
+        idmedic = data['medic']
+
+        
+        query = "a for a in Agenda if a.date == '{}' and a.medico.id == '{}' and a.hour == '{}'".format(date, idmedic, hour)
+        cmdquery = select(query)
+        obj = cmdquery.get()
+        print(obj)
+        if obj.state == False:
+            print("medico disponible en ese horario, con ese id y a esa fecha")
+            p = Patient.get(dni=patientdni).id
+            obj.date = date
+            obj.hour = hour
+            obj.medico = idmedic
+            obj.patient = p
+            obj.state = 1
+            commit()
+            print("guardado")
+        else:
+            print("el medico se encuentra ocupado")
+
+
+
+        
+
+
+
         #table_data['daymonth'] = table_data['day'] + "-" +table_data['month']
 
         # for i in db_data[3]['agenda_data']:
