@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>TP3 Javier Peryera</title>
     
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/prism.css">
-    <link rel="stylesheet" href="/static/css/chosen.css">
+
     <script src="/static/js/bootstrap.min.js"></script>
 
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1 minimum-scale=1">

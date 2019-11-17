@@ -175,7 +175,8 @@ def main_patient_index():
         print("post")
         Assignation().medicassign(dict(request.forms))
         pass
-        
+    
+    #print(DBobjects().loadobjects())
     
     return dict(context=DBobjects().loadobjects())
 

@@ -1,22 +1,28 @@
 {% include "head.tpl" %}
 
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/prism.css">
+<link rel="stylesheet" href="/static/css/chosen.css">
+
+
+
 
 
 
 <h1> Medical assignation </h1>
-
-
 
 <body>
   <form method="POST">
 
       <em>Choose Speciality</em>
           <select class="chosen-select" tabindex="5" name="medic">
-              {%for i in context.4.select_data.items()%}
-            <optgroup label="{{ i.0 }}">
-                {%for j in i%} <option  value="{%for id in j.idmedic%}{{ id }}{%endfor%}"> {%for n in j.name%}{{ n }} </option> {%endfor%} {%endfor%}
+              {%for q, b in context.4.select_data.items()%}
+              {%set names = b['name'] %}
+              {%set ids = b['idmedic']%}
+            <optgroup label="{{ q }}">
+              {%for n in names%} <option value="{{ ids[loop.index0] }}">{{ n }}</option> {%endfor%}
             </optgroup>
-              {%endfor%}
+            {%endfor%}
           </select>
 
       <em>Choose Free time</em>
@@ -36,13 +42,14 @@
         {%for i in context.0.patient_data%}
         <option>{{ i.name }} {{ i.lastname }} - {{ i.dni }}</option>
         {%endfor%}
-
-        
       </select>
-
+  <input type="text" name="comments">
   <input type="submit" value="Submit">
 
-  </form>
+
+</form>
+
+
 
   
 

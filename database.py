@@ -59,7 +59,7 @@ class Speciality(db.Entity):
     """ Speciality table """
     id = PrimaryKey(int, auto=True)
     name = Optional(str)
-    medic = Optional('Medic')
+    medic = Set('Medic')
 
 
 class Medic(db.Entity):
@@ -91,6 +91,7 @@ class Agenda(db.Entity):
     date = Optional(str)
     state = Optional(bool)
     hour = Optional(str)
+    comments = Optional(str)
     medico = Optional(Medic)
     patient = Optional(Patient)
 
