@@ -9,7 +9,7 @@
 
 
 
-<h1> Medical assignation </h1>
+<h1> Medical RE-assignation </h1>
 
 <body>
   <form method="POST">
@@ -25,32 +25,34 @@
             {%endfor%}
           </select>
 
-      <em>Current Assigned Schedule</em>
+      <em>Current Assigned Schedule:</em>
         <select class="chosen-select" tabindex="5" name="daytimehour">
             {%for k, v in context.5.hourmedic.items()%}
             {%set time = v['hours'] %}
             {%set date = v['dates'] %}
 
-             <optgroup label="{{ k }}">     
+          <optgroup label="{{ k }}">     
                 {%for t in time%} <option value"{{ t }}"> Hour: {{ t }} Date: {{ date[loop.index0] }} {%endfor%} </option>  
           </optgroup>
           {%endfor%}
         </select>
-        
-      <em>Choose Patient</em>
-      <select class="chosen-select" tabindex="5" name="patient">
-        {%for i in context.0.patient_data%}
-        <option>{{ i.name }} {{ i.lastname }} - {{ i.dni }}</option>
-        {%endfor%}
-      </select>
+      
+      <em>Choose free time to re-assign:</em>
+      <select class="chosen-select" tabindex="5" name="daytimehour">
+            {%for k, v in context.5.hourmedic.items()%}
+            {%set time = v['hours'] %}
+            {%set date = v['dates'] %}
+
+      <optgroup label="{{ k }}">     
+                {%for t in time%} <option value"{{ t }}"> Hour: {{ t }} Date: {{ date[loop.index0] }} {%endfor%} </option>  
+      </optgroup>
+          {%endfor%}
+      </select><br>
+  Write comments:
   <input type="text" name="comments">
   <input type="submit" value="Submit">
 
 </form>
-
-<button type="button"><a href="/operator/reassignation">reassignation</a></button>
-<h5>Click on the following button to add new users</h5>
-<button type="button"><a href="/useradd">useradd</a></button>
 
 
 

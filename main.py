@@ -172,13 +172,26 @@ def main_patient_index():
     """ operator Main Index """
 
     if request.method == 'POST':
-        print("post")
         Assignation().medicassign(dict(request.forms))
-        pass
-    
-    #print(DBobjects().loadobjects())
+        
     
     return dict(context=DBobjects().loadobjects())
+
+
+@route('/operator/reassignation', method=["GET","POST"])
+@db_session
+@view('reassignation.tpl', template_lookup=['views'])
+def main_operator_reassignation_index():
+    """ operator reassign Main Index """
+
+    if request.method == 'POST':
+        Assignation().currentassign()
+        pass
+        #Assignation().medicassign(dict(request.forms))
+        
+    
+    return dict(context=DBobjects().loadobjects())
+
 
 
 @route('/user')

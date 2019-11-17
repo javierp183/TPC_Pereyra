@@ -193,7 +193,7 @@ class Assignation:
 
             }
         
-        #
+        
         for i in dbdata[2]['spec_data']:
             medicgroups[i['name']]['spec_id'].append(i['id'])
 
@@ -208,6 +208,78 @@ class Assignation:
 
 
         return medicgroups
+    
+    def currentassign(self):
+        data = {}
+
+        # Get Complete list of the Agenda
+        agenda = select(a for a in Agenda)[:]
+        data_agenda = {'agenda_data': [a.to_dict() for a in agenda]}
+
+        #Get Names for the Agenda list
+        query = select(n for n in Agenda)[:]
+
+        #Insert name of medic
+        for k, v in enumerate(query):
+            data_agenda['agenda_data'][k].update(name=v.medico.name)
+            data_agenda['agenda_data'][k].update(medicid=v.medico.medicid)
+            data_agenda['agenda_data'][k].update(hours=v.hour)
+            data_agenda['agenda_data'][k].update(dates=v.date)
+            data_agenda['agenda_data'][k].update(medicn=v.medico.name)
+
+        #Assign names as key value for dict
+        for i in data_agenda['agenda_data']:
+            if bool(i['state']) == True:
+                data[i['name']] = {
+                    'medicid': [],
+                    'medic_name': [],
+                    'patientsid':[],
+                    'patient_name':[],
+                    'patient_lastname':[],
+                    'patient_email':[],
+                    'patient_dni':[],
+                    'hours': [],
+                    'dates': []
+                }
+
+        for i in data_agenda['agenda_data']:
+            if bool(i['state']) == True:
+                data[i['name']]['medicid'].append(i['medicid'])
+                data[i['name']]['medic_name'].append(i['name'])
+                data[i['name']]['hours'].append(i['hour'])
+                data[i['name']]['dates'].append(i['date'])
+
+        
+        query2 = "a for a in Agenda if a.state == True"
+        cmdquery = select(query2)[:]
+
+        for i in cmdquery:
+            data[i.medico.name]['patientsid'].append(i.patient.id)
+            data[i.medico.name]['patient_name'].append(i.patient.name)
+            data[i.medico.name]['patient_name'].append(i.patient.lastname)
+            data[i.medico.name]['patient_lastname'].append(i.patient.lastname)
+            data[i.medico.name]['patient_email'].append(i.patient.email)
+            data[i.medico.name]['patient_dni'].append(i.patient.dni)
+
+
+
+        
+
+
+
+                
+                
+
+                
+                
+
+        
+        
+
+        print(data)
+
+
+        pass
 
 
 class Usermgmt:
