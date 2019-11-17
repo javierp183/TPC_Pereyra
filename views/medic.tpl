@@ -18,7 +18,6 @@
         <tr>
           <th>Medic Name:</th>
           <th>Medic ID:</th>
-          <th>Speciality's</th>
         </tr>
         <tr>
           <td>{{ context.medic.name }} {{ context.medic.lastname }}</td>
@@ -37,6 +36,8 @@
         <th>Time</th>
         <th>DNI</th>
         <th>Day - Month</th>
+        <th>Comments</th>
+        <th>Speciality</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -47,12 +48,17 @@
         {% set item_3 = context.patients.time[loop.index-1] %}
         {% set item_4 = context.patients.daymonth[loop.index-1] %}
         {% set item_5 = context.patients.dni[loop.index-1] %}
+        {% set item_6 = context.patients.comments[loop.index-1]%}
+        {% set item_7 = context.patients.speciality[loop.index-1]%}
         
         <tr>
         <td>{{ item_1 }} {{ item_2 }}</td>
         <td>{{ item_3 }}</td>
         <td>{{ item_5 }}</td>
         <td>{{ item_4  }}</td>
+        <td>{{ item_6 }}</td>
+        <td>{{ item_7 }}</td>
+
 
         <td>
           

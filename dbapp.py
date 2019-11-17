@@ -142,7 +142,9 @@ class Assignation:
                 'time':[],
                 'dni':[],
                 'email':[],
-                'daymonth':[]
+                'daymonth':[],
+                'comments':[],
+                'speciality':[]
             },
             'medic':{
                 'id': '',
@@ -155,7 +157,7 @@ class Assignation:
             }
         }
 
-        query = "a for a in Agenda if a.medico.medicid == '999999' and a.state == True"
+        query = "a for a in Agenda if a.medico.medicid == '{}' and a.state == True".format(medicid)
         cmdquery = select(query)[:]
 
         for i in dbdata[1]['medic_data']:
@@ -173,52 +175,10 @@ class Assignation:
             data['patients']['email'].append(i.patient.email)
             data['patients']['daymonth'].append(i.date)
             data['patients']['time'].append(i.hour)
-
-
-
-
-        # for i in patients['as_assigned']:
-        #     data['patients']['name']
-        #     data['patients']['daymonth'].append(i['date'])
-
-        
+            data['patients']['comments'].append(i.comments)
+            data['patients']['speciality'].append(i.medico.speciality.name)
 
         print(data)
-
-
-
-        # for i in dbdata[1]['medic_data']:
-        #     if i['medicid'] == int(medicid):
-        #         data['medic']['id'] = i['id']
-        #         data['medic']['name'] = i['name']
-        #         data['medic']['lastname'] = i['lastname']
-        #         data['medic']['medicid'] = int(medicid)
-        #         data['medic']['spec_number'] = i['speciality']
-
-        # for i in dbdata[2]['spec_data']:
-        #     if i['id'] == data['medic']['spec_number']:
-        #         data['medic']['speciality'] = i['name']
-
-        # for i in dbdata[3]['agenda_data']:
-        #     if i['medico'] == data['medic']['id']:
-        #         data['medic']['patientsid'].append(i['patient'])
-        #         data['patients']['time'].append(i['hour'])
-        #         data['patients']['daymonth'].append(i['date'])
-
-        
-        # print(dbdata[3]['agenda_data'])
-        #print(data['patients'])
-
-
-        # for i in data['medic']['patientsid']:
-        #     for j in dbdata[0]['patient_data']:
-        #         if i == j['id']:
-        #             data['patients']['name'].append(j['name'])
-        #             data['patients']['lastname'].append(j['lastname'])
-        #             data['patients']['dni'].append(j['dni'])
-
-        # print("patient ID:")
-        # print(dbdata[3]['agenda_data'][1]['medico'])
 
         return data
 
@@ -245,21 +205,8 @@ class Assignation:
                         medicgroups[i['name']]['name'].append(z['name'])
                         medicgroups[i['name']]['lastname'].append(z['lastname'])
                         medicgroups[i['name']]['idmedic'].append(z['id'])
-        
-        # for i in dbdata[2]['spec_data']:
-        #     for j in medicgroups:
-        #         if i['name'] == j:
-        #             medicgroups[i['name']]['idmedic'].append(i['medic'])
-        #             medicgroups[i['name']]['spec_id'].append(i['id'])
 
-        
-        # for i in medicgroups:
-        #     for j in medicgroups[i]['idmedic']:
-        #         for z in dbdata[1]['medic_data']:
-        #             if z['id'] == j:
-        #                 medicgroups[i]['name'].append(z['name'])
-        #                 medicgroups[i]['lastname'].append(z['lastname'])
-            
+
         return medicgroups
 
 
