@@ -33,6 +33,7 @@
 
 from pony.orm import commit
 from pony.orm import db_session
+from pony.orm import select
 from loader import Loader
 import yaml
 
@@ -86,6 +87,44 @@ def user_add():
             medicid=config['loader']['user']['data']['medicid'][i])
         commit()
 
+@db_session()
+def agenda_load():
+        months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto",
+                        "Septiembre","Octubre","Noviembre","Diciembre"]
+        
+        days = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
+                "16","17","18","19","20","21","22","23","24","25","26","27",
+                "28","29","30","31"]
+
+        hours = ["10","11","12"]
+
+        monthday_array = []
+        
+        #List medics
+        mquery = select(m for m in Medic)[:]
+        list_medics = {'medic_list': [m.to_dict() for m in mquery]}
+
+        for m in months:
+                for d in days:
+                        monthday = m + "-" + d
+                        monthday_array.append(monthday)
+
+        
+        for med in list_medics['medic_list']:
+                for md in monthday_array:
+                        for hr in hours:
+                                
+                                Agenda(date=md, state=0, hour=hr,
+                                        medico=int(med['id']))
+                                commit()
+        #print(monthday_array)
+
+        #for i in list_medics['medic_list']:
+                #Agenda
+
+        
+
+
 
 def set_speciality():
         a = Medic[1]
@@ -102,3 +141,4 @@ speciality_add()
 medic_add()
 patient_add()
 user_add()
+agenda_load()

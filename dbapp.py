@@ -39,6 +39,9 @@ class DBobjects:
     def loadobjects(self):
         #Declare the array
         allobjects = []
+        assign = {}
+        hourbymedic = {}
+        
 
         #Get Complete list of Patients
         patients = select(p for p in Patient)[:]
@@ -56,43 +59,68 @@ class DBobjects:
         agenda = select(a for a in Agenda)[:]
         data_agenda = {'agenda_data': [a.to_dict() for a in agenda]}
 
+        #Get Names for the Agenda list
+        query = select(n for n in Agenda)[:]
+
+        #Insert name of medic
+        for k, v in enumerate(query):
+            data_agenda['agenda_data'][k].update(name=v.medico.name)
+
         #Append data to array
         allobjects.append(data_patient)
         allobjects.append(data_medic)
         allobjects.append(data_speciality)
         allobjects.append(data_agenda)
 
+        assign['select_data'] = Assignation().medicbytypes(allobjects)
+        allobjects.append(assign)
+
+        #Get Free time by medic
+        freemedic = select(f for f in Agenda if f.state == False)[:]
+        free_time = {'time_free': [f.to_dict() for f in freemedic]}
+
+        #Assign names as key value of dict
+        for i in data_agenda['agenda_data']:
+            if bool(i['state']) == False:
+                hourbymedic[i['name']] = {
+                    'hours': [],
+                    'dates': []
+                }
+
+        #Append Free date and time
+        for i in data_agenda['agenda_data']:
+            if bool(i['state']) == False:
+                hourbymedic[i['name']]['hours'].append(i['hour'])
+                hourbymedic[i['name']]['dates'].append(i['date'])
+
+        allobjects.append(dict(hourmedic=hourbymedic))
+                
         return allobjects
         
 
 
 class Assignation:
-    def medicassign(self,table_data,db_data):
-        """ Medic Assignation by Specialization """
+        #table_data['daymonth'] = table_data['day'] + "-" +table_data['month']
 
-        state = 0
-
-        table_data['daymonth'] = table_data['day'] + "-" +table_data['month']
-
-        for i in db_data[3]['agenda_data']:
-            """ validate patient id with form patient id """
-            if i['patient'] == int(table_data['userdbid']) \
-                and i['medico'] == int(table_data['spec_selected']) \
-                and i['date'] == table_data['daymonth'] \
-                and i['hour'] == table_data['time']:
-                state = 0
-                return state
-            else:
-                state = 1
+        # for i in db_data[3]['agenda_data']:
+        #     """ validate patient id with form patient id """
+        #     if i['patient'] == int(table_data['userdbid']) \
+        #         and i['medico'] == int(table_data['spec_selected']) \
+        #         and i['date'] == table_data['daymonth'] \
+        #         and i['hour'] == table_data['time']:
+        #         state = 0
+        #         return state
+        #     else:
+        #         state = 1
   
 
-        if state == 1:
-            """ Adding patient if state is true """
-            Agenda(date=table_data['daymonth'], state=1,
-                    hour=table_data['time'], medico=table_data['spec_selected'],
-                    patient=table_data['userdbid'])
+        # if state == 1:
+        #     """ Adding patient if state is true """
+        #     Agenda(date=table_data['daymonth'], state=1,
+        #             hour=table_data['time'], medico=table_data['spec_selected'],
+        #             patient=table_data['userdbid'])
         
-        return state
+        # return state
 
     
     def medicagenda(medicid,dbdata):
@@ -143,6 +171,33 @@ class Assignation:
                     data['patients']['lastname'].append(j['lastname'])
 
         return data
+
+    def medicbytypes(self,dbdata):
+        medicgroups = {}
+        for i in dbdata[2]['spec_data']:
+            medicgroups[i['name']] = {
+                'idmedic':[],
+                'spec_id': [],
+                'name': [],
+                'lastname': []
+
+            }
+        
+        for i in dbdata[2]['spec_data']:
+            for j in medicgroups:
+                if i['name'] == j:
+                    medicgroups[i['name']]['idmedic'].append(i['medic'])
+                    medicgroups[i['name']]['spec_id'].append(i['id'])
+
+        
+        for i in medicgroups:
+            for j in medicgroups[i]['idmedic']:
+                for z in dbdata[1]['medic_data']:
+                    if z['id'] == j:
+                        medicgroups[i]['name'].append(z['name'])
+                        medicgroups[i]['lastname'].append(z['lastname'])
+            
+        return medicgroups
 
 
 class Usermgmt:

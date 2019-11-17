@@ -1,6 +1,6 @@
 {% include "head.tpl" %}
 
-<div class="form-style-5">
+<div class="form-style-6">
 <h3>Main Page</h3>
 <h3>Login</h3>
 

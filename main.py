@@ -111,7 +111,7 @@ def main_index():
         print(urol)
 
         if urol['role'] == 'admin':
-            return redirect('/patient')
+            return redirect('/operator')
 
         elif urol['role'] == 'medic':
             mid = access.getmedicid(data)
@@ -149,31 +149,36 @@ def main_doctor_index(medicid):
     print("salida")
     dbdata = DBobjects().loadobjects()
     medic = Assignation.medicagenda(medicid,dbdata)
+    estado_salida = dict(request.params)
 
-    print(dict(request.params))
-
-    print(medic)
-    
+    if request.method == 'POST':
+        try:
+            if estado_salida['estado'] == 'on':
+                print("prendido")
+                medic['saludo'] = saludo
+                print(medic)
+                
+        except:
+            print("apagado")
+            print(medic)
     
     return dict(context=medic)
 
 
-@route('/patient', method=["GET","POST"])
+@route('/operator', method=["GET","POST"])
 @db_session
-@view('patient.tpl', template_lookup=['views'])
+@view('operator.tpl', template_lookup=['views'])
 def main_patient_index():
-    """ Patient Main Index """
-    medics_patients = []
+    """ operator Main Index """
 
-    dbdata = DBobjects().loadobjects()
-    
     if request.method == 'POST':
-        p = Assignation()
-        p.medicassign(dict(request.forms),dbdata)
+        print("salida del post:")
+        print(dict(request.forms))
+        #group['freetime'] = Assignation().searchfreetime(dict(request.forms),dbdata)
+        pass
         
-
-
-    return dict(context=dbdata)
+    
+    return dict(context=DBobjects().loadobjects())
 
 
 @route('/user')
@@ -190,4 +195,13 @@ def main_doctor_index():
     return dict(context=medics_patients)
 
 
+@route('/api/v1')
+@db_session
+def api_doctor():
+    pass
+
+
 run(**settings['framework'])
+
+
+
