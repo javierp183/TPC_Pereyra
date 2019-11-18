@@ -25,7 +25,7 @@
             {%endfor%}
           </select>
 
-      <em>Current Assigned Schedule</em>
+      <em>Choose Free time</em>
         <select class="chosen-select" tabindex="5" name="daytimehour">
             {%for k, v in context.5.hourmedic.items()%}
             {%set time = v['hours'] %}

@@ -1,46 +1,115 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: black;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.registerbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.registerbtn:hover {
+  opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+  color: dodgerblue;
+}
+
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+  background-color: #f1f1f1;
+  text-align: center;
+}
+</style>
+</head>
 <body>
 
-<h3>Choose user type:</h3>
-<h4>Medic, Patient or User of the App</h4><br>
-
-
 <form method="POST">
+  <div class="container">
+    <h1>Register new user</h1>
+    <p>Please fill in this form to create an account.</p>
+    <hr>
 
-  
-  First name:<br>
-  <input type="text" name="name">
-  <br>
-  Last name:<br>
-  <input type="text" name="lastname">
-  <br>
-  Medic ID<br>
-  <input type="text" name="medicid">
-  <li>Only Medic's</li>
-  <br>
-  Speciality:<br>
-  <input type="text" name="speciality">
-  <li>Only Medic's</li>
-  <br>
-  Userid<br>
-  <input type="text" name="userid">
-  <br>
-  Password
-  <input type="password" name="password">
-  <br>
-  Medic
-  <input type="checkbox" name="medic" value=1>
-  <br>
-  Admin
-  <input type="checkbox" name="admin" value=1>
-  <br>
-  Patient
-  <input type="checkbox" name="patient" value=1>
-  <br>
-  <input type="submit" value="Submit">
+    <label for="name"><b>First Name</b></label>
+    <input type="text" placeholder="Enter Name" name="name" required>
 
-</form> 
+    <label for="lastname"><b>Last Name</b></label>
+    <input type="text" placeholder="Enter Last Name" name="lastname" required>
+
+    <label for="medicid"><b>Medic ID</b></label>
+    <input type="text" placeholder="Enter Medic ID - ONLY FOR MEDIC registration -" name="medicid" required>
+
+    <label for="userid"><b>USER ID</b></label>
+    <input type="text" placeholder="Enter USER ID" name="userid" required>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <label for="psw-repeat"><b>Repeat Password</b></label>
+    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+    <hr>
+    <p>Select Account type: </p>
+    <label for="medic"><b>Medic?</b></label>
+    <input type="checkbox" placeholder="Medic" name="medic" value=1>
+    <br>
+    <label for="operator"><b>Operator?</b></label>
+    <input type="checkbox" placeholder="Operator" name="admin" value=1>
+    <br>
+    <label for="patient"><b>Patient?</b></label>
+    <input type="checkbox" placeholder="Patient" name="patient" value=1>
+
+    <button type="submit" class="registerbtn">Register</button>
+  </div>
+
+</form>
 
 </body>
 </html>

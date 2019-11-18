@@ -89,7 +89,8 @@ class DBobjects:
             if bool(i['state']) == False:
                 hourbymedic[i['name']] = {
                     'hours': [],
-                    'dates': []
+                    'dates': [],
+                    'agenda_id': []
                 }
         
         #Append Free date and time
@@ -97,11 +98,17 @@ class DBobjects:
             if bool(i['state']) == False:
                 hourbymedic[i['name']]['hours'].append(i['hour'])
                 hourbymedic[i['name']]['dates'].append(i['date'])
+        
+
+        #Get Agenda ID from database
+        query = "a for a in Agenda if a.state == False"
+        cmdquery = select(query)[:]
+        for i in cmdquery:
+            hourbymedic[i.medico.name]['agenda_id'].append(i.id)
+
 
         allobjects.append(dict(hourmedic=hourbymedic))
-
-
-                
+  
         return allobjects
         
 
@@ -209,8 +216,9 @@ class Assignation:
 
         return medicgroups
     
-    def currentassign(self):
+    def currentassign():
         data = {}
+        mydata = []
 
         # Get Complete list of the Agenda
         agenda = select(a for a in Agenda)[:]
@@ -239,8 +247,11 @@ class Assignation:
                     'patient_email':[],
                     'patient_dni':[],
                     'hours': [],
-                    'dates': []
+                    'dates': [],
+                    'speciality_name': [],
+                    'agenda_id': []
                 }
+
 
         for i in data_agenda['agenda_data']:
             if bool(i['state']) == True:
@@ -260,25 +271,22 @@ class Assignation:
             data[i.medico.name]['patient_lastname'].append(i.patient.lastname)
             data[i.medico.name]['patient_email'].append(i.patient.email)
             data[i.medico.name]['patient_dni'].append(i.patient.dni)
-
-
-
-        
-
-
-
-                
-                
-
-                
-                
+            data[i.medico.name]['speciality_name'].append(i.medico.speciality.name)
+            data[i.medico.name]['agenda_id'].append(i.id)
 
         
-        
+        return data
 
-        print(data)
-
-
+    def reassignation(self,datacurrent,datanew):
+        current = Agenda.get(id=datacurrent)
+        newsched = Agenda.get(id=datanew)
+        current.state = False
+        newsched.state = True
+        newsched.comments = current.comments
+        newsched.medico = current.medico
+        newsched.patient = current.patient
+        commit()
+        print("creo que cambio!")
         pass
 
 

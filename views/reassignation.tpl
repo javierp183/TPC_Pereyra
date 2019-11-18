@@ -4,52 +4,45 @@
 <link rel="stylesheet" href="/static/css/prism.css">
 <link rel="stylesheet" href="/static/css/chosen.css">
 
-
-
-
-
-
 <h1> Medical RE-assignation </h1>
+
 
 <body>
   <form method="POST">
 
-      <em>Choose Speciality</em>
-          <select class="chosen-select" tabindex="5" name="medic">
-              {%for q, b in context.4.select_data.items()%}
-              {%set names = b['name'] %}
-              {%set ids = b['idmedic']%}
-            <optgroup label="{{ q }}">
-              {%for n in names%} <option value="{{ ids[loop.index0] }}">{{ n }}</option> {%endfor%}
-            </optgroup>
-            {%endfor%}
-          </select>
-
       <em>Current Assigned Schedule:</em>
-        <select class="chosen-select" tabindex="5" name="daytimehour">
-            {%for k, v in context.5.hourmedic.items()%}
+        <select class="chosen-select" tabindex="5" name="current">
+            {%for k, v in context.6.currentdata.items()%}
             {%set time = v['hours'] %}
             {%set date = v['dates'] %}
+            {%set medic_name = v['medic_name']%}
+            {%set patient_name = v['patient_name']%}
+            {%set patient_lastname = v['patient_lastname']%}
+            {%set patient_dni = v['patient_dni']%}
+            {%set speciality_name = v['speciality_name']%}
+            {%set agenda_id = v['agenda_id']%}
 
           <optgroup label="{{ k }}">     
-                {%for t in time%} <option value"{{ t }}"> Hour: {{ t }} Date: {{ date[loop.index0] }} {%endfor%} </option>  
+                {%for t in time%} <option value="{{ agenda_id[loop.index0] }}"> Hour: {{ t }} Date: {{ date[loop.index0] }} Patient: 
+                  {{ patient_lastname[loop.index0] }} DNI: {{ patient_dni[loop.index0] }}
+                   Spec: {{ speciality_name[loop.index0] }}
+                  {%endfor%} </option>  
           </optgroup>
           {%endfor%}
         </select>
       
       <em>Choose free time to re-assign:</em>
-      <select class="chosen-select" tabindex="5" name="daytimehour">
+      <select class="chosen-select" tabindex="5" name="newtime">
             {%for k, v in context.5.hourmedic.items()%}
             {%set time = v['hours'] %}
             {%set date = v['dates'] %}
+            {%set agenda_id = v['agenda_id']%}
 
       <optgroup label="{{ k }}">     
-                {%for t in time%} <option value"{{ t }}"> Hour: {{ t }} Date: {{ date[loop.index0] }} {%endfor%} </option>  
+                {%for t in time%} <option value="{{ agenda_id[loop.index0] }}"> Hour: {{ t }} Date: {{ date[loop.index0] }} {%endfor%} </option>  
       </optgroup>
           {%endfor%}
       </select><br>
-  Write comments:
-  <input type="text" name="comments">
   <input type="submit" value="Submit">
 
 </form>

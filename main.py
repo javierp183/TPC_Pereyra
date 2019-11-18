@@ -138,7 +138,7 @@ def main_useradd_index():
     create = Usermgmt()
     create.adduser(data)
 
-    pass
+    return dict(context={'output': 'none'})
 
 
 @route('/medic/<medicid>', method=["GET","POST"])
@@ -183,14 +183,17 @@ def main_patient_index():
 @view('reassignation.tpl', template_lookup=['views'])
 def main_operator_reassignation_index():
     """ operator reassign Main Index """
+    current = Assignation.currentassign()
+    alldata = DBobjects().loadobjects()
+    alldata.append(dict(currentdata=current))
 
     if request.method == 'POST':
-        Assignation().currentassign()
-        pass
-        #Assignation().medicassign(dict(request.forms))
+        data = dict(request.forms)
         
+        Assignation().reassignation(data['current'],data['newtime'])
+        pass        
     
-    return dict(context=DBobjects().loadobjects())
+    return dict(context=alldata)
 
 
 
@@ -207,11 +210,6 @@ def main_doctor_index():
 
     return dict(context=medics_patients)
 
-
-@route('/api/v1')
-@db_session
-def api_doctor():
-    pass
 
 
 run(**settings['framework'])
