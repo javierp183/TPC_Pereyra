@@ -121,17 +121,29 @@ class Assignation:
         idmedic = data['medic']
         comment = data['comments']
 
-        
+
         query = "a for a in Agenda if a.date == '{}' and a.medico.id == '{}' and a.hour == '{}'".format(date, idmedic, hour)
         cmdquery = select(query)
+        if not cmdquery:
+            medictype = True
+            idmedic = int(idmedic)
+            idmedic = idmedic + 1
+            query = "a for a in Agenda if a.date == '{}' and a.medico.id == '{}' and a.hour == '{}'".format(date, idmedic, hour)
+            cmdquery = select(query)
         obj = cmdquery.get()
-        print(obj)
+
         if obj.state == False:
             print("medico disponible en ese horario, con ese id y a esa fecha")
             p = Patient.get(dni=patientdni).id
             obj.date = date
             obj.hour = hour
-            obj.medico = idmedic
+
+            if medictype == True:
+                idmedic = idmedic - 1
+                obj.medico = idmedic
+            else:
+                obj.medico = idmedic
+            
             obj.patient = p
             obj.comments = comment
             obj.state = 1
@@ -294,11 +306,73 @@ class Usermgmt:
     def adduser(self,data):
         try:
             if data['medic']:
-                User(name=data['name'], lastname=data['lastname'],
-                    userid=data['userid'], password=data['password'],
-                    rol="medic")
+                nonempty_spec_list = []
+                nonempty_spec_list_id = []
+
+                # Generate new speciality only if not exist
+                for spec in data['specialization'].split(","):
+                    if not Speciality.get(name=spec):
+                        Speciality(name=spec)
+                        commit()
+                
+                # Add medic to the medic list with speciality's
+                for spec in data['specialization'].split(","):
+                    query = "m for m in Medic if m.speciality.name == '{}' and m.medicid == '{}'".format(spec,data['medicid'])
+                    cmdquery = select(query)[:]
+
+                    if cmdquery:
+                        nonempty_spec_list.append(False)
+                    else:
+                        nonempty_spec_list.append(spec)
+
+
+                for i in nonempty_spec_list:
+                    nonempty_spec_list_id.append(Speciality.get(name=i))
+                
+                
+                for i in nonempty_spec_list_id:
+                    if i:
+                        Medic(name=data['name'], lastname=data['lastname'],
+                                medicid=data['medicid'], patient=None, speciality=i)
+                        commit()
+                
+                # Create free schedule ( it's takes a moment )
+                query = "m for m in Medic if m.speciality.name == '{}' and m.medicid == '{}'".format(spec,data['medicid'])
+                cmdquery = select(query)[:]
+                dbmedicid = cmdquery[0]
+                
+                months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
+                        "Julio","Agosto",
+                        "Septiembre","Octubre","Noviembre","Diciembre"]
+                
+                days = ["1","2","3","4","5","6","7","8","9","10","11","12",
+                "13","14","15",
+                "16","17","18","19","20","21","22","23","24","25","26","27",
+                "28","29","30","31"]
+
+                hours = ["10","11","12"]
+
+                
+                monthday_array = []
+
+                for m in months:
+                    for d in days:
+                        monthday = m + "-" + d
+                        monthday_array.append(monthday)
+                
+
+
+                for md in monthday_array:
+                    for hr in hours:
+                        Agenda(date=md, state=0, hour=hr, medico=dbmedicid.id)
+                        commit()
+                
+
+                newuser = User(name=data['name'], lastname=data['lastname'],
+                            userid=data['userid'], password=data['password'],
+                            medicid=data['medicid'],rol="medic")
                 commit()
-                print(comiteo)
+                print("comiteo")
         except:
             pass
 
@@ -314,10 +388,11 @@ class Usermgmt:
 
         try:
             if data['patient']:
-                newuser = Patient(name=data['name'], lastname=data['lastname'],
-                                dni=data['dni'], email=data['email'])
-                commit()
-                print("comiteo")
+                if not Patient.get(dni=data['dni']):
+                    newuser = Patient(name=data['name'], lastname=data['lastname'],
+                    dni=data['dni'], email=data['email'])
+                    commit()
+                    print("comiteo")
         except:
             pass
 

@@ -5,16 +5,12 @@
 <link rel="stylesheet" href="/static/css/chosen.css">
 
 
-
-
-
-
-<h1> Medical assignation </h1>
+<h1> Asignacion de turnos medicos: </h1>
 
 <body>
   <form method="POST">
 
-      <em>Choose Speciality</em>
+      <em>Elegir medico y especialidad</em>
           <select class="chosen-select" tabindex="5" name="medic">
               {%for q, b in context.4.select_data.items()%}
               {%set names = b['name'] %}
@@ -25,7 +21,7 @@
             {%endfor%}
           </select>
 
-      <em>Choose Free time</em>
+      <em>Elegir tiempo libre</em>
         <select class="chosen-select" tabindex="5" name="daytimehour">
             {%for k, v in context.5.hourmedic.items()%}
             {%set time = v['hours'] %}
@@ -37,14 +33,15 @@
           {%endfor%}
         </select>
         
-      <em>Choose Patient</em>
+      <em>Elegir paciente</em>
       <select class="chosen-select" tabindex="5" name="patient">
         {%for i in context.0.patient_data%}
         <option>{{ i.name }} {{ i.lastname }} - {{ i.dni }}</option>
         {%endfor%}
       </select>
+      <br>
   <input type="text" name="comments">
-  <input type="submit" value="Submit">
+  <input type="submit" value="Ingresar">
 
 </form>
 
