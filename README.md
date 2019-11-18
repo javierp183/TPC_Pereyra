@@ -116,11 +116,11 @@ cd project
 ```
 
 ``` 
-docker build -t "tcl_pereyra" .
+docker build -t "tpc_pereyra" .
 ```
 
 ``` 
-docker run -p 8080:8080 -it tcl_pereyra
+docker run -p 8080:8080 -it tpc_pereyra
 ```
 
 ``` 
