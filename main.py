@@ -138,6 +138,8 @@ def main_useradd_index():
     create = Usermgmt()
     create.adduser(data)
 
+    print(data)
+
     return dict(context={'output': 'none'})
 
 

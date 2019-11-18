@@ -298,24 +298,26 @@ class Usermgmt:
                     userid=data['userid'], password=data['password'],
                     rol="medic")
                 commit()
+                print(comiteo)
         except:
             pass
 
         try:
             if data['admin']:
-                User(name=data['name'], lastname=data['lastname'],
-                    userid=data['userid'], password=data['password'],
-                    rol="admin")
+                newuser = User(name=data['name'], lastname=data['lastname'],
+                            userid=data['userid'], password=data['password'],
+                            rol="admin")
                 commit()
+                print("comiteo")
         except:
             pass
-            
+
         try:
             if data['patient']:
-                User(name=data['name'], lastname=data['lastname'],
-                    userid=data['userid'], password=data['password'],
-                    rol="admin")
+                newuser = Patient(name=data['name'], lastname=data['lastname'],
+                                dni=data['dni'], email=data['email'])
                 commit()
+                print("comiteo")
         except:
             pass
 

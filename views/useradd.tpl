@@ -81,30 +81,34 @@ a {
     <label for="lastname"><b>Last Name</b></label>
     <input type="text" placeholder="Enter Last Name" name="lastname" required>
 
+    <label for="dni"><b>DNI</b></label>
+    <input type="text" placeholder="Enter DNI - ONLY FOR PATIENT AND MEDIC registration -" name="dni">
+
     <label for="medicid"><b>Medic ID</b></label>
-    <input type="text" placeholder="Enter Medic ID - ONLY FOR MEDIC registration -" name="medicid" required>
+    <input type="text" placeholder="Enter Medic ID - ONLY FOR MEDIC registration -" name="medicid">
+
+    <label for="specialization"><b>Medic Specialization</b></label>
+    <input type="text" placeholder="Specialization: spec_one,spec_two,spec_three (use comma to ingress multiple specializations)" name="specialization">
 
     <label for="userid"><b>USER ID</b></label>
-    <input type="text" placeholder="Enter USER ID" name="userid" required>
+    <input type="text" placeholder="Enter USER ID" name="userid">
 
     <label for="email"><b>Email</b></label>
     <input type="text" placeholder="Enter Email" name="email" required>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <label for="password"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password (ONLY FOR MEDIC OR THE OPERATOR) " name="password">
 
-    <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-    <hr>
     <p>Select Account type: </p>
     <label for="medic"><b>Medic?</b></label>
     <input type="checkbox" placeholder="Medic" name="medic" value=1>
     <br>
-    <label for="operator"><b>Operator?</b></label>
+    <label for="admin"><b>Admin App Operator?</b></label>
     <input type="checkbox" placeholder="Operator" name="admin" value=1>
     <br>
-    <label for="patient"><b>Patient?</b></label>
+    <label for="patient"><b>Ingress Patient?</b></label>
     <input type="checkbox" placeholder="Patient" name="patient" value=1>
+    <br>
 
     <button type="submit" class="registerbtn">Register</button>
   </div>
