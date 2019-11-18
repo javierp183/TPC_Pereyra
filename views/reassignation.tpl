@@ -4,13 +4,13 @@
 <link rel="stylesheet" href="/static/css/prism.css">
 <link rel="stylesheet" href="/static/css/chosen.css">
 
-<h1> Medical RE-assignation </h1>
+<h1> Re-asignacion de turnos: </h1>
 
 
 <body>
   <form method="POST">
 
-      <em>Current Assigned Schedule:</em>
+      <em>Asignaciones actuales:</em>
         <select class="chosen-select" tabindex="5" name="current">
             {%for k, v in context.6.currentdata.items()%}
             {%set time = v['hours'] %}
@@ -31,7 +31,7 @@
           {%endfor%}
         </select>
       
-      <em>Choose free time to re-assign:</em>
+      <em>Seleccione un turno libre:</em>
       <select class="chosen-select" tabindex="5" name="newtime">
             {%for k, v in context.5.hourmedic.items()%}
             {%set time = v['hours'] %}
@@ -43,7 +43,7 @@
       </optgroup>
           {%endfor%}
       </select><br>
-  <input type="submit" value="Submit">
+  <input type="submit" value="Asignar">
 
 </form>
 

@@ -71,23 +71,23 @@ a {
 
 <form method="POST">
   <div class="container">
-    <h1>Register new user</h1>
-    <p>Please fill in this form to create an account.</p>
+    <h1>Registre un nuevo usuario</h1>
+    <p>Por favor complete los campos</p>
     <hr>
 
-    <label for="name"><b>First Name</b></label>
+    <label for="name"><b>Primer Nombre</b></label>
     <input type="text" placeholder="Enter Name" name="name" required>
 
-    <label for="lastname"><b>Last Name</b></label>
+    <label for="lastname"><b>Apellido</b></label>
     <input type="text" placeholder="Enter Last Name" name="lastname" required>
 
     <label for="dni"><b>DNI</b></label>
     <input type="text" placeholder="Enter DNI - ONLY FOR PATIENT AND MEDIC registration -" name="dni">
 
-    <label for="medicid"><b>Medic ID</b></label>
+    <label for="medicid"><b>Numero de Medico</b></label>
     <input type="text" placeholder="Enter Medic ID - ONLY FOR MEDIC registration -" name="medicid">
 
-    <label for="specialization"><b>Medic Specialization</b></label>
+    <label for="specialization"><b>Especializacion</b></label>
     <input type="text" placeholder="Specialization: spec_one,spec_two,spec_three (use comma to ingress multiple specializations)" name="specialization">
 
     <label for="userid"><b>USER ID</b></label>
@@ -99,18 +99,18 @@ a {
     <label for="password"><b>Password</b></label>
     <input type="password" placeholder="Enter Password (ONLY FOR MEDIC OR THE OPERATOR) " name="password">
 
-    <p>Select Account type: </p>
-    <label for="medic"><b>Medic?</b></label>
+    <p>Seleccione el tipo de cuenta: </p>
+    <label for="medic"><b>Medico?</b></label>
     <input type="checkbox" placeholder="Medic" name="medic" value=1>
     <br>
-    <label for="admin"><b>Admin App Operator?</b></label>
+    <label for="admin"><b>Admin Operador?</b></label>
     <input type="checkbox" placeholder="Operator" name="admin" value=1>
     <br>
-    <label for="patient"><b>Ingress Patient?</b></label>
+    <label for="patient"><b>Ingreso de Paciente?</b></label>
     <input type="checkbox" placeholder="Patient" name="patient" value=1>
     <br>
 
-    <button type="submit" class="registerbtn">Register</button>
+    <button type="submit" class="registerbtn">Registrar</button>
   </div>
 
 </form>

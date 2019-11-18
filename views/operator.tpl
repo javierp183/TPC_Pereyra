@@ -45,18 +45,14 @@
 
 </form>
 
-<button type="button"><a href="/operator/reassignation">reassignation</a></button>
-<h5>Click on the following button to add new users</h5>
-<button type="button"><a href="/useradd">useradd</a></button>
-
-
-
-  
+<p>Presione el boton para reasignar turnos:</p>
+<button type="button"><a href="/operator/reassignation">reasignacion de turnos</a></button>
+<p>Presione el boto para añadir usuarios:</p>
+<button type="button"><a href="/useradd">Añadir usuarios</a></button>
 
   <script src="/static/js/jquery-3.2.1.min.js" type="text/javascript"></script>
   <script src="/static/js/chosen.jquery.js" type="text/javascript"></script>
   <script src="/static/js/prism.js" type="text/javascript" charset="utf-8"></script>
   <script src="/static/js/init.js" type="text/javascript" charset="utf-8"></script>
-
 
   {% include "foot.tpl" %}

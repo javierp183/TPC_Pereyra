@@ -126,21 +126,4 @@ docker run -p 8080:8080 -it tcl_pereyra
 ``` 
 Go to firefox browser -> url:  http://localhost:8080/route's
 ```
-
-# Default routes ->
-
-<h3> http://localhost:8080/medic <br>
-     http://localhost:8080/patient <br>
-     http://localhost:8080/user <br>
-     http://localhost:8080/useradd <br>
-</h3>
-
-/medic <- Medic personal information pre-loaded.
-
-/patient <-Patient Assignation to Medic
-
-/useradd <- User add/delete/modification
-
-/Medic <- Agenda by Specific medic.
-
 ### Author: Javier E. Pereyra

@@ -16,8 +16,8 @@
 <div class="container mt-3">
     <table>
         <tr>
-          <th>Medic Name:</th>
-          <th>Medic ID:</th>
+          <th>Nombre del medico:</th>
+          <th>ID del medico:</th>
         </tr>
         <tr>
           <td>{{ context.medic.name }} {{ context.medic.lastname }}</td>
@@ -25,24 +25,23 @@
           <td>{{ context.medic.speciality }}</td
         </tr>
     </table>
-  <h3>Patients</h3>
-  <p>Type something in the input field to search first names, last names or dni number:</p>  
+  <h3>Pacientes</h3>
+  <p>Ingrese dni, comentario o fechas para filtrar:</p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
   <br>
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th>Firstname and Lastname</th>
-        <th>Time</th>
+        <th>Nombre y Apellido</th>
+        <th>Horario</th>
         <th>DNI</th>
-        <th>Day - Month</th>
-        <th>Comments</th>
-        <th>Speciality</th>
+        <th>Mes y Dia</th>
+        <th>Comentarias</th>
+        <th>Motivo/Especialidad</th>
       </tr>
     </thead>
     <tbody id="myTable">
         {%for i in context.patients.name%}
-
         {% set item_1 = context.patients.name[loop.index-1] %}
         {% set item_2 = context.patients.lastname[loop.index-1] %}
         {% set item_3 = context.patients.time[loop.index-1] %}
@@ -50,7 +49,6 @@
         {% set item_5 = context.patients.dni[loop.index-1] %}
         {% set item_6 = context.patients.comments[loop.index-1]%}
         {% set item_7 = context.patients.speciality[loop.index-1]%}
-        
         <tr>
         <td>{{ item_1 }} {{ item_2 }}</td>
         <td>{{ item_3 }}</td>
@@ -58,10 +56,7 @@
         <td>{{ item_4  }}</td>
         <td>{{ item_6 }}</td>
         <td>{{ item_7 }}</td>
-
-
         <td>
-          
         </tr>
         {%endfor%}
     </tbody>
