@@ -120,6 +120,7 @@ class Assignation:
         patientdni = data['patient'].split("-")[1]
         idmedic = data['medic']
         comment = data['comments']
+        medictype = False
 
 
         query = "a for a in Agenda if a.date == '{}' and a.medico.id == '{}' and a.hour == '{}'".format(date, idmedic, hour)
