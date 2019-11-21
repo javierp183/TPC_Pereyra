@@ -2,7 +2,6 @@
 application:
   tittle: Trabajo Practico Numero 3
 
-
 framework:
   host: 0.0.0.0
   port: 8080
@@ -68,5 +67,9 @@ loader:
         - 999999
         - 888888
         
-      
-    
+
+email:
+  account: utnprogramacion3@gmail.com
+  password: h51kolv3
+  smtp: smtp.gmail.com
+  port: 587

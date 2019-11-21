@@ -33,6 +33,37 @@ from database import Speciality
 from database import User
 from pony.orm import commit
 from pony.orm import select
+from loader import Loader
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+# Load configurations from YML file.
+config = Loader().settings
+
+class Email:
+    def __init__(self):
+        self.account = config['email']['account']
+        self.password = config['email']['password']
+        self.smtp = config['email']['smtp']
+        self.port = config['email']['port']
+    
+    def send(self, receiver, name, date, hour):
+        message = MIMEMultipart()
+        message['From'] = self.account
+        message['To'] = receiver
+        message['Subject'] = 'Hospital - TSP - Javier Pereyra'
+        mail_content = "Usted tiene un turno con el medico {} en la fecha {} a las {} horas".format(name,date,hour)
+        message.attach(MIMEText(mail_content, 'plain'))
+
+        session = smtplib.SMTP(self.smtp, self.port)
+        session.starttls()
+        session.login(self.account, self.password)
+        text = message.as_string()
+        session.sendmail(self.account, receiver, text)
+        session.quit()
+        print('Mail Sent')
+        pass
 
 
 class DBobjects:
@@ -133,9 +164,11 @@ class Assignation:
             cmdquery = select(query)
         obj = cmdquery.get()
 
+        # Valida si el estado del medico se encuentra disponible.
         if obj.state == False:
-            print("medico disponible en ese horario, con ese id y a esa fecha")
             p = Patient.get(dni=patientdni).id
+            pemail = Patient.get(dni=patientdni).email
+
             obj.date = date
             obj.hour = hour
 
@@ -148,6 +181,12 @@ class Assignation:
             obj.patient = p
             obj.comments = comment
             obj.state = 1
+
+            #Sent email
+            EnviarEmail = Email()
+            EnviarEmail.send(pemail,idmedic,date,hour)
+
+            #Commit into Database
             commit()
         else:
             print("el medico se encuentra ocupado")
