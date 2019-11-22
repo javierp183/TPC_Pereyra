@@ -49,13 +49,13 @@
 </form>
 
 <p>Presione el boton para reasignar turnos:</p>
-<button type="button"><a href="/operator/reassignation">reasignacion de turnos</a></button>
+<button type="button"><a href="/operator/reassignation/{{ context.6.operator.userid }}">reasignacion de turnos</a></button>
 
 <p>Presione el boton para añadir usuarios:</p>
-<button type="button"><a href="/useradd">Añadir usuarios</a></button>
+<button type="button"><a href="/useradd/{{ context.6.operator.userid }}">Añadir usuarios</a></button>
 
 <p>Presione el boton para borrar usuarios:</p>
-<button type="button"><a href="/userdel">Borrar usuarios</a></button>
+<button type="button"><a href="/userdel/{{ context.6.operator.userid }}">Borrar usuarios</a></button>
 
   <script src="/static/js/jquery-3.2.1.min.js" type="text/javascript"></script>
   <script src="/static/js/chosen.jquery.js" type="text/javascript"></script>

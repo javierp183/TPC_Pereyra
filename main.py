@@ -83,6 +83,16 @@ def medic_non_assigned():
 def wronguserpass():
     pass
 
+@route('/wrongops')
+@view('wrongops.tpl', template_lookup=['views'])
+def wronguserpass():
+    pass
+
+@route('/wrongmedic')
+@view('wrongmedic.tpl', template_lookup=['views'])
+def wronguserpass():
+    pass
+
 @route('/savemedic')
 @view('already_registered.tpl', template_lookup=['views'])
 def thanks():
@@ -128,24 +138,37 @@ def main_index():
         
 
 
-@route('/useradd', method=["GET","POST"])
+@route('/useradd/<ops>', method=["GET","POST"])
 @db_session
 @view('useradd.tpl', template_lookup=['views'])
-def main_useradd_index():
+def main_useradd_index(ops):
     """ Main UserAdd Index """
     data = dict(request.forms)
+
+    if User.get(userid=ops).rol == 'admin':
+        print("este es un usuario admin")
+    else:
+        return redirect('/wrongops')
+    
     create = Usermgmt()
     create.adduser(data)
 
     return dict(context={'output': 'none'})
 
 
-@route('/userdel', method=["GET","POST"])
+@route('/userdel/<ops>', method=["GET","POST"])
 @db_session
 @view('userdel.tpl', template_lookup=['views'])
-def main_useradd_index():
+def main_userdel_index(ops):
     """ Main UserAdd Index """
     data = dict(request.forms)
+
+    if User.get(userid=ops).rol == 'admin':
+        print("este es un usuario admin")
+    else:
+        return redirect('/wrongops')
+    
+
     create = Usermgmt()
     create.deleteuser(data)
 
@@ -157,7 +180,14 @@ def main_useradd_index():
 @view('medic.tpl', template_lookup=['views'])
 def main_doctor_index(medicid):
     """ Medic Main Index """
-    print("salida")
+    try:
+        if User.get(medicid=medicid).rol == 'medic':
+            print("este es un usuario medico")
+        else:
+            return redirect('/wrongmedic')
+    except AttributeError:
+        return redirect('/wrongmedic')
+
     dbdata = DBobjects().loadobjects()
     medic = Assignation.medicagenda(medicid,dbdata)
     estado_salida = dict(request.params)
@@ -188,9 +218,18 @@ def main_operator_index(ops):
         'lastname': ''
         }
     }
+
+    
     data = DBobjects().loadobjects()
+    print(data)
     admin_user['operator']['name'] = User.get(userid=ops).name
     admin_user['operator']['lastname'] = User.get(userid=ops).lastname
+
+    if User.get(userid=ops).rol == 'admin':
+        print("este es un usuario admin")
+    else:
+            return redirect('/wrongops')
+    
     data.append(admin_user)
 
     if request.method == 'POST':
@@ -200,11 +239,20 @@ def main_operator_index(ops):
     return dict(context=data)
 
 
-@route('/operator/reassignation', method=["GET","POST"])
+@route('/operator/reassignation/<ops>', method=["GET","POST"])
 @db_session
 @view('reassignation.tpl', template_lookup=['views'])
-def main_operator_reassignation_index():
+def main_operator_reassignation_index(ops):
     """ operator reassign Main Index """
+
+    try:
+        if User.get(userid=ops).rol == 'admin':
+            print("este es un usuario medico")
+        else:
+            return redirect('/wrongops')
+    except AttributeError:
+        return redirect('/wrongops')
+
     current = Assignation.currentassign()
     alldata = DBobjects().loadobjects()
     alldata.append(dict(currentdata=current))
