@@ -71,15 +71,9 @@ a {
 
 <form method="POST">
   <div class="container">
-    <h1>Registre un nuevo usuario</h1>
+    <h1>Use una de las siguientes opciones para borrar un usuario</h1>
     <p>Por favor complete los campos</p>
     <hr>
-
-    <label for="name"><b>Primer Nombre</b></label>
-    <input type="text" placeholder="Enter Name" name="name" required>
-
-    <label for="lastname"><b>Apellido</b></label>
-    <input type="text" placeholder="Enter Last Name" name="lastname" required>
 
     <label for="dni"><b>DNI</b></label>
     <input type="text" placeholder="Enter DNI - ONLY FOR PATIENT -" name="dni">
@@ -87,19 +81,10 @@ a {
     <label for="medicid"><b>Numero de Medico</b></label>
     <input type="text" placeholder="Enter Medic ID - ONLY FOR MEDIC registration -" name="medicid">
 
-    <label for="specialization"><b>Especializacion</b></label>
-    <input type="text" placeholder="Specialization: spec_one,spec_two,spec_three (use comma to ingress multiple specializations) ONLY FOR MEDIC" name="specialization">
-
     <label for="userid"><b>USER ID</b></label>
-    <input type="text" placeholder="Enter USER ID" name="userid">
+    <input type="text" placeholder="Ingrese USERID ( SOLO PARA OPERADORES )" name="userid">
 
-    <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
-
-    <label for="password"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password (ONLY FOR MEDIC OR THE OPERATOR) " name="password">
-
-    <p>Seleccione el tipo de cuenta: </p>
+    <p>Seleccione el tipo de cuenta que desea eliminar: </p>
     <label for="medic"><b>Medico?</b></label>
     <input type="checkbox" placeholder="Medic" name="medic" value=1>
     <br>

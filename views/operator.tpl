@@ -4,6 +4,9 @@
 <link rel="stylesheet" href="/static/css/prism.css">
 <link rel="stylesheet" href="/static/css/chosen.css">
 
+<h1>Nombre de Operador: {{ context.6.operator.name }} </h1>
+<h1>Apellido: {{ context.6.operator.lastname }} </h1>
+<p>Usuario:  {{ context.6.operator.userid }} </p>
 
 <h1> Asignacion de turnos medicos: </h1>
 
@@ -41,14 +44,16 @@
       </select>
       <br>
   <input type="text" name="comments">
-  <input type="submit" value="Ingresar">
+  <input type="submit" onclick="alert('Turno Asignado!!!')" value="Ingresar">
 
 </form>
 
 <p>Presione el boton para reasignar turnos:</p>
 <button type="button"><a href="/operator/reassignation">reasignacion de turnos</a></button>
-<p>Presione el boto para añadir usuarios:</p>
+<p>Presione el boton para añadir usuarios:</p>
 <button type="button"><a href="/useradd">Añadir usuarios</a></button>
+<p>Presione el boton para borrar usuarios:</p>
+<button type="button"><a href="/userdel">Borrar usuarios</a></button>
 
   <script src="/static/js/jquery-3.2.1.min.js" type="text/javascript"></script>
   <script src="/static/js/chosen.jquery.js" type="text/javascript"></script>

@@ -39,7 +39,7 @@ import yaml
 
 from database import Medic,Patient
 from database import Agenda,User
-from database import Speciality
+from database import Speciality,Turno
 
 # Load configurations from YML file.
 config = Loader().settings
@@ -78,6 +78,9 @@ def patient_add():
 
 @db_session()
 def user_add():
+    User(name="Maximiliano", lastname="Sar Fernandez", userid="maxi182", password="abc123",
+        rol="admin")
+    commit()
     for i in range(2):
         User(name=config['loader']['user']['data']['name'][i],
             lastname=config['loader']['user']['data']['lastname'][i],
@@ -86,6 +89,7 @@ def user_add():
             rol=config['loader']['user']['data']['rol'][i],
             medicid=config['loader']['user']['data']['medicid'][i])
         commit()
+
 
 @db_session()
 def agenda_load():
@@ -117,20 +121,19 @@ def agenda_load():
                                 Agenda(date=md, state=0, hour=hr,
                                         medico=int(med['id']))
                                 commit()
-        #print(monthday_array)
 
-        #for i in list_medics['medic_list']:
-                #Agenda
-
-        
-
-
-
+@db_session()
 def set_speciality():
         a = Medic[1]
         a.speciality = Speciality[1]
         b = Medic[2]
         b.speciality = Speciality[2]
+        commit()
+
+
+@db_session()
+def init_turnos():
+        Turno(turno=1)
         commit()
 
 # # --------------------------------------------------------------------------- #
@@ -142,3 +145,5 @@ medic_add()
 patient_add()
 user_add()
 agenda_load()
+set_speciality()
+init_turnos()

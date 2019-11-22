@@ -43,7 +43,7 @@
       </optgroup>
           {%endfor%}
       </select><br>
-  <input type="submit" value="Asignar">
+  <input type="submit" onclick="alert('Turno Re-Asignado!!!')" value="Asignar">
 
 </form>
 

@@ -31,8 +31,9 @@
 from database import Patient,Medic,Agenda
 from database import Speciality
 from database import User
+from database import Turno
 from pony.orm import commit
-from pony.orm import select
+from pony.orm import select,delete
 from loader import Loader
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -48,12 +49,12 @@ class Email:
         self.smtp = config['email']['smtp']
         self.port = config['email']['port']
     
-    def send(self, receiver, name, date, hour):
+    def send(self, receiver, name, date, hour, turno):
         message = MIMEMultipart()
         message['From'] = self.account
         message['To'] = receiver
         message['Subject'] = 'Hospital - TSP - Javier Pereyra'
-        mail_content = "Usted tiene un turno con el medico {} en la fecha {} a las {} horas".format(name,date,hour)
+        mail_content = "Usted tiene un turno con el medico {} en la fecha {} a las {} horas - Turno numero: {}".format(name,date,hour,turno)
         message.attach(MIMEText(mail_content, 'plain'))
 
         session = smtplib.SMTP(self.smtp, self.port)
@@ -62,7 +63,6 @@ class Email:
         text = message.as_string()
         session.sendmail(self.account, receiver, text)
         session.quit()
-        print('Mail Sent')
         pass
 
 
@@ -72,8 +72,7 @@ class DBobjects:
         allobjects = []
         assign = {}
         hourbymedic = {}
-       
-        
+
 
         #Get Complete list of Patients
         patients = select(p for p in Patient)[:]
@@ -152,6 +151,7 @@ class Assignation:
         idmedic = data['medic']
         comment = data['comments']
         medictype = False
+        inc = 0
 
 
         query = "a for a in Agenda if a.date == '{}' and a.medico.id == '{}' and a.hour == '{}'".format(date, idmedic, hour)
@@ -182,12 +182,18 @@ class Assignation:
             obj.comments = comment
             obj.state = 1
 
+            #Obtengo nombre del medico
+            nombre_medico = Medic.get(id=idmedic).name
+
+            #Genera un turno.
+            a = Turno[1]
+            a.turno = a.turno + 1
+            commit()
+
             #Sent email
             EnviarEmail = Email()
-            EnviarEmail.send(pemail,idmedic,date,hour)
+            EnviarEmail.send(pemail,nombre_medico,date,hour,a.turno)
 
-            #Commit into Database
-            commit()
         else:
             print("el medico se encuentra ocupado")
 
@@ -349,13 +355,14 @@ class Usermgmt:
                 nonempty_spec_list = []
                 nonempty_spec_list_id = []
 
-                # Generate new speciality only if not exist
+                # Genera una nueva lista de especialidades si esta no
+                # existiere
                 for spec in data['specialization'].split(","):
                     if not Speciality.get(name=spec):
                         Speciality(name=spec)
                         commit()
                 
-                # Add medic to the medic list with speciality's
+                # Suma al nuevo medico a la lista de especialidades
                 for spec in data['specialization'].split(","):
                     query = "m for m in Medic if m.speciality.name == '{}' and m.medicid == '{}'".format(spec,data['medicid'])
                     cmdquery = select(query)[:]
@@ -376,7 +383,7 @@ class Usermgmt:
                                 medicid=data['medicid'], patient=None, speciality=i)
                         commit()
                 
-                # Create free schedule ( it's takes a moment )
+                # Genera una agenda libre para el medico
                 query = "m for m in Medic if m.speciality.name == '{}' and m.medicid == '{}'".format(spec,data['medicid'])
                 cmdquery = select(query)[:]
                 dbmedicid = cmdquery[0]
@@ -440,19 +447,41 @@ class Usermgmt:
         pass
 
     def deleteuser(self,data):
-        pass
+        try:
+            if data['admin']:
+                deleteuser = User.get(userid=data['userid'])
+                deleteuser.delete()
+                commit()
+        except:
+            pass
+
+        try:
+            if data['medic']:
+                print("salida 1")
+                deleteuser = User.get(userid=data['userid'])
+                print(deleteuser)
+                print("salida 2")
+                deleteuser.delete()
+                print("salida 3")
+                delete(m for m in Agenda if m.medico.medicid == data['medicid'])
+                commit()
+        except:
+            pass
 
     def validate(self, data):
         try:
             if User.exists(userid=data['userid']):
                 role = User.get(userid=data['userid']).rol
                 password = User.get(userid=data['userid']).password
-
                 if data['password'] == password:
                     return dict({'state': True, 'role': role})
+                else:
+                    return dict({'state': False, 'role': 'None'})
+            else:
+                return dict({'state': False, 'role': 'None'})
         except:
-            return dict({'state': False, 'rol': 'None'})
-    
+            pass
+
 
     def getmedicid(self, data):
         """ Obtain medic id number """

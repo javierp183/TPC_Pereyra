@@ -103,15 +103,14 @@ def complete():
 def main_index():
     """ Main Index """
     data = dict(request.forms)
+    print(data)
     
     access = Usermgmt()
     if request.method == 'POST':
 
         urol = access.validate(data)
-        print(urol)
-
         if urol['role'] == 'admin':
-            return redirect('/operator')
+            return redirect('/operator/{}'.format(data['userid']))
 
         elif urol['role'] == 'medic':
             mid = access.getmedicid(data)
@@ -121,8 +120,8 @@ def main_index():
             return redirect('/user')
 
         elif urol['role'] == 'None':
-            print("salida:")
-            print(urol['role'])
+            print("salida")
+            #print(urol['role'])
             return redirect('/wronguserpass')
         
     return dict(context={'output': 'none'})
@@ -138,7 +137,17 @@ def main_useradd_index():
     create = Usermgmt()
     create.adduser(data)
 
-    print(data)
+    return dict(context={'output': 'none'})
+
+
+@route('/userdel', method=["GET","POST"])
+@db_session
+@view('userdel.tpl', template_lookup=['views'])
+def main_useradd_index():
+    """ Main UserAdd Index """
+    data = dict(request.forms)
+    create = Usermgmt()
+    create.deleteuser(data)
 
     return dict(context={'output': 'none'})
 
@@ -167,23 +176,34 @@ def main_doctor_index(medicid):
     return dict(context=medic)
 
 
-@route('/operator', method=["GET","POST"])
+@route('/operator/<ops>', method=["GET","POST"])
 @db_session
 @view('operator.tpl', template_lookup=['views'])
-def main_patient_index():
+def main_operator_index(ops):
     """ operator Main Index """
+    admin_user = {
+        'operator': {
+        'userid': ops,
+        'name': '',
+        'lastname': ''
+        }
+    }
+    data = DBobjects().loadobjects()
+    admin_user['operator']['name'] = User.get(userid=ops).name
+    admin_user['operator']['lastname'] = User.get(userid=ops).lastname
+    data.append(admin_user)
 
     if request.method == 'POST':
         Assignation().medicassign(dict(request.forms))
         
     
-    return dict(context=DBobjects().loadobjects())
+    return dict(context=data)
 
 
-@route('/operator/reassignation', method=["GET","POST"])
+@route('/operator/<ops>/reassignation', method=["GET","POST"])
 @db_session
 @view('reassignation.tpl', template_lookup=['views'])
-def main_operator_reassignation_index():
+def main_operator_reassignation_index(ops):
     """ operator reassign Main Index """
     current = Assignation.currentassign()
     alldata = DBobjects().loadobjects()

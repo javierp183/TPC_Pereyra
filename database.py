@@ -106,6 +106,10 @@ class User(db.Entity):
     dni = Optional(str)
     rol = Optional(str)
 
+class Turno(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    turno = Optional(int)
+
 
 # --------------------------------------------------------------------------- #
 # Create Tables

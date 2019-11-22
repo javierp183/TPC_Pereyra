@@ -18,6 +18,7 @@
 
 <p align="center">Contacte al operador si desea registrarse ya sea como Operador o Medico</p>
 <p align="center">al siguiente correo: operador@hospital.com</p>
+<p align="center"> email version </p>
 
 
 
