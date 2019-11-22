@@ -50,8 +50,10 @@
 
 <p>Presione el boton para reasignar turnos:</p>
 <button type="button"><a href="/operator/reassignation">reasignacion de turnos</a></button>
+
 <p>Presione el boton para añadir usuarios:</p>
 <button type="button"><a href="/useradd">Añadir usuarios</a></button>
+
 <p>Presione el boton para borrar usuarios:</p>
 <button type="button"><a href="/userdel">Borrar usuarios</a></button>
 

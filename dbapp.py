@@ -459,7 +459,6 @@ class Usermgmt:
             if data['medic']:
                 print("salida 1")
                 deleteuser = User.get(userid=data['userid'])
-                print(deleteuser)
                 print("salida 2")
                 deleteuser.delete()
                 print("salida 3")

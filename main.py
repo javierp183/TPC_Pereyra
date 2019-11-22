@@ -200,10 +200,10 @@ def main_operator_index(ops):
     return dict(context=data)
 
 
-@route('/operator/<ops>/reassignation', method=["GET","POST"])
+@route('/operator/reassignation', method=["GET","POST"])
 @db_session
 @view('reassignation.tpl', template_lookup=['views'])
-def main_operator_reassignation_index(ops):
+def main_operator_reassignation_index():
     """ operator reassign Main Index """
     current = Assignation.currentassign()
     alldata = DBobjects().loadobjects()
