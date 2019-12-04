@@ -47,6 +47,11 @@ config = Loader().settings
 db = Database()
 db.bind(**config['database']['engine'], create_db=True)
 
+@db.on_connect(provider='sqlite')
+def sqlite_case_sensitivity(db, connection):
+    cursor = connection.cursor()
+    cursor.execute('PRAGMA synchronous = OFF')
+
 #Debug database output
 if config['database']['debug']:
     set_sql_debug(True)

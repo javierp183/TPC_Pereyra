@@ -53,7 +53,7 @@
         <td>{{ item_1 }} {{ item_2 }}</td>
         <td>{{ item_3 }}</td>
         <td>{{ item_5 }}</td>
-        <td>{{ item_4  }}</td>
+        <td>{{ item_4.split("/")[0].split("-")[0] }} - {{ item_4.split("/")[1].split("-")[1] }} </td>
         <td>{{ item_6 }}</td>
         <td>{{ item_7 }}</td>
         <td>

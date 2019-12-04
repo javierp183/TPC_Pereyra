@@ -5,7 +5,6 @@
 <button type="submit" name="paciente" value="paciente">Ingreso de paciente</button>
 </form>
 
-
 Ingresar Medico:
 <form method="POST">
     Nombre: <input type="text" name="name"><br>
@@ -37,9 +36,6 @@ Ingresar Medico:
   <tr>
     Domingo
   </tr>
-  <tr>
-      Es medico?
-  </tr>
   <th>
       <input type="checkbox" name="lunes" value="lunes">
   </th>
@@ -60,9 +56,6 @@ Ingresar Medico:
   </th>
   <th>
       <input type="checkbox" name="domingo" value="domingo">
-  </th>
-  <th>
-      <input type="checkbox" name="medico" value=1>
   </th>
 </table>
 

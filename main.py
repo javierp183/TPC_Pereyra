@@ -73,6 +73,12 @@ def medic_assigned():
     pass
 
 
+@route('/turnoasignado')
+@view('turno_asignado.tpl', template_lookup=['views'])
+def turno_asignado():
+    pass
+
+
 @route('/medicanonssigned')
 @view('medic_non_assigned.tpl', template_lookup=['views'])
 def medic_non_assigned():
@@ -102,6 +108,147 @@ def thanks():
 @view('complete_fields.tpl', template_lookup=['views'])
 def complete():
     pass
+
+@route('/addmedic', method=["GET","POST"])
+@view('useradd_medic.tpl', template_lookup=['views'])
+def addmedic():
+    form_data = {
+        'semana': [],
+        'horario': [],
+        'medicid': '',
+        'specialization': '',
+        'medico': '',
+        'password': ''
+    }
+
+    try:
+        if request.method == 'POST':
+            if request.forms.get('operador') == "operador":
+                return redirect('/addoperator')
+            elif request.forms.get('paciente') == "paciente":
+                return redirect('/addpaciente')
+    except AttributeError:
+        return redirect('/addmedic')
+    
+    if request.method == 'POST':
+        form_data['name'] = request.forms.get('name').lower()
+        form_data['lastname'] = request.forms.get('lastname').lower()
+        form_data['userid'] = request.forms.get('userid').lower()
+        form_data['semana'].append(request.forms.get('lunes'))
+        form_data['semana'].append(request.forms.get('martes'))
+        form_data['semana'].append(request.forms.get('miercoles'))
+        form_data['semana'].append(request.forms.get('jueves'))
+        form_data['semana'].append(request.forms.get('viernes'))
+        form_data['semana'].append(request.forms.get('sabado'))
+        form_data['semana'].append(request.forms.get('domingo'))
+        form_data['horario'].append(request.forms.get('turno1'))
+        form_data['horario'].append(request.forms.get('turno2'))
+        form_data['horario'].append(request.forms.get('turno3'))
+        form_data['medicid'] = request.forms.get('medicid')
+        form_data['specialization'] = request.forms.get('specialization').lower()
+        form_data['medico'] = 1
+        form_data['password'] = request.forms.get('password')
+    
+        for i in form_data['semana']:
+            if not i:
+                return "Complete todos los campos!"
+        
+        if not form_data['name']:
+            return "Complete todos los campos!"
+
+        if not form_data['lastname']:
+            return "Complete todos los campos!"
+
+        if not form_data['userid']:
+            return "Complete todos los campos!"
+
+        if not form_data['specialization']:
+            return "Complete todos los campos!"
+
+        if not form_data['specialization']:
+            return "Complete todos los campos!"
+        
+    
+    print(form_data)
+    pass
+
+
+
+@route('/addoperator', method=["GET","POST"])
+@view('useradd_operador.tpl', template_lookup=['views'])
+def addoperator():
+    form_data = {
+        'name': '',
+        'lastname': '',
+        'userid': '',
+        'password': '',
+        'admin': ''
+    }
+    if request.method == 'POST':
+        if request.forms.get('medico') == "medico":
+            return redirect('/addmedic')
+        elif request.forms.get('paciente') == "paciente":
+            print("elijio paciente!!!")
+            return redirect('/addpaciente')
+    
+    if request.method == 'POST':
+        form_data['name'] = request.forms.get('name')
+        form_data['lastname'] = request.forms.get('lastname')
+        form_data['userid'] = request.forms.get('userid')
+        form_data['password'] = request.forms.get('password')
+        form_data['admin'] = 1
+
+        if not form_data['name']:
+            return "Complete todos los campos!"
+
+        if not form_data['lastname']:
+            return "Complete todos los campos!"
+
+        if not form_data['userid']:
+            return "Complete todos los campos!"
+
+        if not form_data['password']:
+            return "Complete todos los campos!"
+    
+    print(form_data)
+
+
+@route('/addpaciente', method=["GET","POST"])
+@view('useradd_paciente.tpl', template_lookup=['views'])
+def addpaciente():
+    form_data = {
+        'name': '',
+        'lastname': '',
+        'userid': '',
+        'password': '',
+        'admin': ''
+    }
+    if request.method == 'POST':
+        if request.forms.get('medico') == "medico":
+            return redirect('/addmedic')
+        elif request.forms.get('operador') == "operador":
+            return redirect('/addoperator')
+    
+    if request.method == 'POST':
+        form_data['name'] = request.forms.get('name')
+        form_data['lastname'] = request.forms.get('lastname')
+        form_data['userid'] = request.forms.get('userid')
+        form_data['password'] = request.forms.get('password')
+        form_data['admin'] = 1
+
+        if not form_data['name']:
+            return "Complete todos los campos!"
+
+        if not form_data['lastname']:
+            return "Complete todos los campos!"
+
+        if not form_data['userid']:
+            return "Complete todos los campos!"
+
+        if not form_data['password']:
+            return "Complete todos los campos!"
+    
+    print(form_data)
 
 # --------------------------------------------------------------------------- #
 # Application Main Routes
@@ -144,16 +291,44 @@ def main_index():
 def main_useradd_index(ops):
     """ Main UserAdd Index """
     data = dict(request.forms)
+    password = User.get(userid=ops).password
+    ingresos = {
+        'ingreso1': '',
+        'ingreso2': '',
+        'ingreso3': ''
+    }
+    form_data = {
+        'semana': [],
+        'horario': [],
+        'medicid': '',
+        'medico': ''
 
-    if User.get(userid=ops).rol == 'admin':
-        print("este es un usuario admin")
-    else:
+    }
+
+
+    try:
+        if User.get(userid=ops).rol == 'admin':
+            print("salida 1")
+            if request.method == 'POST':
+                print("salida 2")
+                if request.forms.get('medico') == "medico":
+                    return redirect('/addmedic')
+                elif request.forms.get('operador') == "operador":
+                    return redirect('/addoperator')
+                elif request.forms.get('paciente') == "paciente":
+                    return redirect('/addpaciente')
+            else:
+                pass
+        else:
+            return redirect('/wrongops')
+    except AttributeError:
         return redirect('/wrongops')
     
-    create = Usermgmt()
-    create.adduser(data)
+    #create = Usermgmt()
+    #create.adduser(form_data)
 
     return dict(context={'output': 'none'})
+
 
 
 @route('/userdel/<ops>', method=["GET","POST"])
@@ -206,6 +381,7 @@ def main_doctor_index(medicid):
     return dict(context=medic)
 
 
+
 @route('/operator/<ops>', method=["GET","POST"])
 @db_session
 @view('operator.tpl', template_lookup=['views'])
@@ -218,25 +394,55 @@ def main_operator_index(ops):
         'lastname': ''
         }
     }
+    ingresos = {
+        'ingreso1': '',
+        'ingreso2': '',
+        'ingreso3': '',
+        'patient': '',
+        'comments': '',
+        'turno': ''
+    }
+    freetime = {
+        'hours': [],
+        'dates': []
+    }
 
-    
     data = DBobjects().loadobjects()
-    print(data)
+    
     admin_user['operator']['name'] = User.get(userid=ops).name
     admin_user['operator']['lastname'] = User.get(userid=ops).lastname
 
-    if User.get(userid=ops).rol == 'admin':
-        print("este es un usuario admin")
-    else:
-            return redirect('/wrongops')
-    
+    if not User.get(userid=ops).rol == 'admin':
+        return redirect('/wrongops')
+
     data.append(admin_user)
+    ingresos['ingreso1'] = 0
+    data.append(ingresos)
 
     if request.method == 'POST':
-        Assignation().medicassign(dict(request.forms))
-        
-    
+        ingresos['ingreso1'] = request.forms.get('medic')
+        ingresos['ingreso2'] = request.forms.get('mes')
+        ingresos['ingreso3'] = request.forms.get('dias')
+        ingresos['patient'] = request.forms.get('patient')
+        ingresos['comments'] = request.forms.get('comments')
+        ingresos['turno'] = request.forms.get('turno')
+        print(request.forms.get('turno'))
+        query = request.forms.get('medic')
+        buscar = DBobjects()
+        salida = buscar.get_free_time_by_medic_id(query)
+        salida2 = buscar.get_free_days(query)
+        data.append(salida)
+        data.append(salida2)
+        if ingresos['turno'] == "Ingresar":
+            doassign = Assignation()
+            out = doassign.medicassign(ingresos)
+            if out == "ok":
+                return template('turno_asignado.tpl', context=ops)
+        else:
+            print("nada que asignar")
+
     return dict(context=data)
+
 
 
 @route('/operator/reassignation/<ops>', method=["GET","POST"])
