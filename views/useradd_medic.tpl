@@ -9,7 +9,7 @@ Ingresar Medico:
 <form method="POST">
     Nombre: <input type="text" name="name"><br>
     Apellido: <input type="text" name="lastname"><br>
-    Registre Usuario: <input type="text" name="userid"><br>
+    Usuario del sistema ( USERID ):: <input type="text" name="userid"><br>
     ID del Medico: <input type="text" name="medicid"><br>
     Clave para el Usuario: <input type="password" name="password"><br>
   Dias de trabajo <br>

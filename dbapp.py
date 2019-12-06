@@ -322,13 +322,15 @@ class DBobjects:
 
         for i in cmdquery:
             if i.date.split("/")[0] == "Noviembre-11":
-                mdatos = i.date.split("/")[1] + " Hora:" + i.date.split("/")[2]
-                data[i.medico.medicid]['days']['Noviembre-11'].append(mdatos)
-                bnoviembre = True
+                if i.date.split("/")[2] != "None":
+                    mdatos = i.date.split("/")[1] + " Hora:" + i.date.split("/")[2]
+                    data[i.medico.medicid]['days']['Noviembre-11'].append(mdatos)
+                    bnoviembre = True
             elif i.date.split("/")[0] == "Diciembre-12":
-                mdatos = i.date.split("/")[1] + " Hora:" + i.date.split("/")[2]
-                data[i.medico.medicid]['days']['Diciembre-12'].append(mdatos)
-                bdiciembre = True
+                if i.date.split("/")[2] != "None":
+                    mdatos = i.date.split("/")[1] + " Hora:" + i.date.split("/")[2]
+                    data[i.medico.medicid]['days']['Diciembre-12'].append(mdatos)
+                    bdiciembre = True
 
         if bnoviembre:
             data[int(medicid)]['months'].append("Noviembre-11")
@@ -426,7 +428,9 @@ class Assignation:
             cmdquery = select(query)
         obj = cmdquery.get()
 
+
         # Valida si el estado del medico se encuentra disponible.
+
         if obj.state == False:
             p = Patient.get(dni=patientdni).id
             pemail = Patient.get(dni=patientdni).email
@@ -457,9 +461,8 @@ class Assignation:
             EnviarEmail = Email()
             EnviarEmail.send(pemail,nombre_medico,date_splited,hour,a.turno)
             return "ok"
-
         else:
-            print("el medico se encuentra ocupado")
+            print("error")
 
 
     
@@ -504,7 +507,6 @@ class Assignation:
             data['patients']['dni'].append(i.patient.dni)
             data['patients']['email'].append(i.patient.email)
             data['patients']['daymonth'].append(i.date)
-            print(i.date)
             data['patients']['time'].append(i.hour)
             data['patients']['comments'].append(i.comments)
             data['patients']['speciality'].append(i.medico.speciality.name)

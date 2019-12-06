@@ -583,6 +583,8 @@ def main_operator_index(ops):
             out = doassign.medicassign(ingresos)
             if out == "ok":
                 return template('turno_asignado.tpl', context=ops)
+            elif out == "error":
+                return "Horario no valido, vuelva atras e ingrese un horario valido"
         else:
             print("nada que asignar")
 

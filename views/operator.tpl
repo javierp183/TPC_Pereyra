@@ -14,6 +14,8 @@
       <h1>Nombre de Operador: {{ context.6.operator.name }} </h1>
       <h1>Apellido: {{ context.6.operator.lastname }} </h1>
       <p>Usuario:  {{ context.6.operator.userid }} </p>
+
+      {{ context.7.ingreso1 }}
       
     <form method="POST">      
       
@@ -25,10 +27,11 @@
                   {%for q, b in context.4.select_data.items()%}
                   {%set names = b['name']%}
                   {%set ids = b['idmedic']%}
+                  {{ ids }}
 
                 <optgroup label="{{ q }}">
                     {%for id in ids%}
-                    <option value="{{ id }}" {%if context.7.ingreso1 == id | string%} selected="selected"{%endif%}>{{ names[loop.index0] }}</option>
+                    <option value="{{ id }}" {% if context.7.ingreso1== id | string %} selected="selected" {%endif%}>{{ names[loop.index0] }}</option>
                       {%endfor%}
                     {%endfor%} 
                 </optgroup>
