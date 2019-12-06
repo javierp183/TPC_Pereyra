@@ -100,7 +100,6 @@ def ver_turnos(ops):
     dbdata = DBobjects().loadobjects()
     medic="none"
 
-
     try:
         if request.method == 'POST':
             if request.forms.get('buscar') == "buscar":
@@ -110,37 +109,12 @@ def ver_turnos(ops):
     except:
         return "Ingrese MedicID valido, <a href='/ver_turnos/{}'>volver atras</a>".format(ops)
     
+    if request.method == 'POST':
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
 
-    
-    # try:
-    #     if User.get(medicid=medicid).rol == 'medic':
-    #         print("este es un usuario medico")
-    #     else:
-    #         return redirect('/wrongmedic')
-    # except AttributeError:
-    #     return redirect('/wrongmedic')
 
-    # medicid = 0
-    # if request.method == 'POST':
-    #     if request.forms.get('volver') == "volver":
-    #         return redirect('/operator/{}'.format(ops))
-        
-    #     if request.forms.get('buscar') == "buscar":
-    #         print("salida")
-    #         print("entrada")
-    #         medicid = request.forms.get('medicid')
-    #         medic = Assignation.medicagenda(medicid,dbdata)
-    #         return dict(context=medic)
-
-    # dbdata = DBobjects().loadobjects()
-    # medic = Assignation.medicagenda(medicid,dbdata)
-    # estado_salida = dict(request.params)
-
-    # medic = "out"
     return dict(context=medic)
-    pass
-    #return dict(context=medic)
-    
 
 
 
@@ -554,13 +528,11 @@ def main_doctor_index(medicid):
     if request.method == 'POST':
         try:
             if estado_salida['estado'] == 'on':
-                print("prendido")
                 medic['saludo'] = saludo
                 print(medic)
                 
         except:
-            print("apagado")
-            print(medic)
+            pass
     
     return dict(context=medic)
 
@@ -604,14 +576,10 @@ def main_operator_index(ops):
 
     data.append(admin_user)
     ingresos['ingreso1'] = 0
-    print("primer ingreso:")
-    print(ingresos['ingreso1'])
     data.append(ingresos)
 
     if request.method == 'POST':
-        print("segundo ingreso:")
         ingresos['ingreso1'] = request.forms.get('medic')
-        print(ingresos['ingreso1'])
         ingresos['ingreso2'] = request.forms.get('mes')
         ingresos['ingreso3'] = request.forms.get('dias')
         ingresos['patient'] = request.forms.get('patient')
@@ -657,7 +625,7 @@ def main_operator_reassignation_index(ops):
 
 
     if request.forms.get('volver') == "volver":
-        return redirect('/operator/{}'.format(ops))
+        return  redirect('/operator/{}'.format(ops))
 
 
     if request.method == 'POST':

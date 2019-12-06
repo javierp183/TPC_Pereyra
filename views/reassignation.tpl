@@ -44,13 +44,10 @@
           {%endfor%}
       </select><br>
   <input type="submit" value="Asignar">
+  <button type="submit" name="volver" value="volver">Volver atras</a></button>
+
 
 </form>
-
-<button type="submit" name="volver" value="volver">Volver atras</a></button>
-
-
-
   
 
   <script src="/static/js/jquery-3.2.1.min.js" type="text/javascript"></script>
