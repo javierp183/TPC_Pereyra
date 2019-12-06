@@ -92,6 +92,30 @@ def turno_asignado():
     pass
 
 
+@route('/ver_turnos/<ops>', method=["GET","POST"])
+@db_session
+@view('ver_turnos.tpl', template_lookup=['views'])
+def ver_turnos(ops):
+
+    try:
+        if request.method == 'POST':
+            medicid = request.forms.get("medicid")
+            dbdata = DBobjects().loadobjects()
+            medic = Assignation.medicagenda(medicid,dbdata)
+    except:
+        pass
+
+    # dbdata = DBobjects().loadobjects()
+    # medic = Assignation.medicagenda(medicid,dbdata)
+    # estado_salida = dict(request.params)
+    print("salida de la agenda del medico:")
+    print(medic)
+    medic = {'out':'data'}
+
+
+    return dict(context=medic)
+
+
 @route('/medicanonssigned')
 @view('medic_non_assigned.tpl', template_lookup=['views'])
 def medic_non_assigned():
@@ -187,27 +211,28 @@ def addmedic(ops):
 
     
         if not form_data['name']:
-            return "Complete todos los campos!, volver atras"
+            return "Complete todos los campos!, volver atras, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if not form_data['lastname']:
-            return "Complete todos los campos!, volver atras"
+            return "Complete todos los campos!, volver atras, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if not form_data['userid']:
-            return "Complete todos los campos!, volver atras"
+            return "Complete todos los campos!, volver atras, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if not form_data['specialization']:
-            return "Complete todos los campos!, volver atras"
+            return "Complete todos los campos!, volver atras, <a href='/useradd/{}'>volver atras</a>".format(ops)
         
         if not form_data['specialization']:
-            return "Complete todos los campos!, volver atras"
+            return "Complete todos los campos!, volver atras, <a href='/useradd/{}'>volver atras</a>".format(ops)
         
         if User.exists(medicid=int(request.forms.get('medicid'))):
-            return "El usuario ya existe!!!, volver atras"
+            return "El usuario ya existe!!!, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
 
     create = Usermgmt()
     if create.adduser(form_data):
-        return "Usuario creado"
+        return "Usuario creado!!!, <a href='/useradd/{}'>volver atras</a>".format(ops)
+        print(form_data)
     
 
     
@@ -252,20 +277,20 @@ def addoperator(ops):
         form_data['admin'] = 1
 
         if not form_data['name']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addoperator/{}'>volver atras</a>".format(ops)
 
         if not form_data['lastname']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addoperator/{}'>volver atras</a>".format(ops)
 
         if not form_data['userid']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addoperator/{}'>volver atras</a>".format(ops)
 
         if not form_data['password']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addoperator/{}'>volver atras</a>".format(ops)
 
     create = Usermgmt()
     if create.adduser(form_data):
-        return "Usuario operador creado"
+        return "Usuario operador creado, <a href='/addoperator/{}'>volver atras</a>".format(ops)
     
     print(form_data)
 
@@ -307,21 +332,21 @@ def addpaciente(ops):
         form_data['patient'] = 1
 
         if not form_data['name']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
 
         if not form_data['lastname']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
 
         if not form_data['dni']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
 
         if not form_data['email']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
         
         if Patient.exists(dni=int(request.forms.get('dni'))):
-            return "El DNI ya esta registrado, registre otro!"
+            return "El DNI ya esta registrado, registre otro!, <a href='/useradd/{}'>volver atras</a>".format(ops)
         elif Patient.exists(email=str(request.forms.get('email'))):
-            return "El Email ya esta registrado, use otro!"
+            return "El Email ya esta registrado, use otro!, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
     create = Usermgmt()
     if create.adduser(form_data):
@@ -438,29 +463,29 @@ def main_useradd_index(ops):
         form_data['specialization'] = string[:-1]
         
         if not form_data['name']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if not form_data['lastname']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if not form_data['userid']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if not form_data['specialization']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if not form_data['specialization']:
-            return "Complete todos los campos!"
+            return "Complete todos los campos!, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
         if User.exists(userid=str(request.forms.get('userid'))):
             return "El userid ya se esta usando!!!"
 
         if User.exists(medicid=int(request.forms.get('medicid'))):
-            return "El usuario ya existe!!!"
+            return "El usuario ya existe!!!, <a href='/useradd/{}'>volver atras</a>".format(ops)
     
     create = Usermgmt()
     if create.adduser(form_data):
-        return "Usuario creado"
+        return "Usuario creado, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
     
     
@@ -612,9 +637,8 @@ def main_operator_reassignation_index(ops):
 
     if request.method == 'POST':
         data = dict(request.forms)
-        
         Assignation().reassignation(data['current'],data['newtime'])
-        pass        
+        return "Turno reasignado!!!, , <a href='/operator/reassignation/{}'>volver atras</a>".format(ops)
     
     return dict(context=alldata)
 

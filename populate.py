@@ -40,6 +40,8 @@ import yaml
 from database import Medic,Patient
 from database import Agenda,User
 from database import Speciality,Turno
+import datetime
+import calendar
 
 # Load configurations from YML file.
 config = Loader().settings
@@ -48,6 +50,154 @@ config = Loader().settings
 # --------------------------------------------------------------------------- #
 # Populate Database
 # --------------------------------------------------------------------------- #
+
+def agenda_cargador(data):
+    
+    agenda = {}
+    meses = ["Enero-1","Febrero-2","Marzo-3","Abril-4","Mayo-5","Junio-6",
+                        "Julio-7","Agosto-8",
+                        "Septiembre-9","Octubre-10",
+                        "Noviembre-11","Diciembre-12"]
+
+
+    for mes in meses:
+        agenda[mes] = {
+            'lunes': {
+            'dias': [],
+            'horario': []
+        },
+        'martes': {
+            'dias': [],
+            'horario': []
+        },
+        'miercoles': {
+            'dias': [],
+            'horario': []
+        },
+        'jueves': {
+            'dias': [],
+            'horario': []
+        },
+        'viernes': {
+            'dias': [],
+            'horario': []
+        },
+        'sabado': {
+            'dias': [],
+            'horario': []
+        },
+        'domingo': {
+            'dias': [],
+            'horario': []
+        }
+    }
+
+    #Obtiene el mes actual para la carga
+    ahora = datetime.datetime.now()
+    diadehoy = ahora.day
+    
+    mes_inicio = ahora.month
+    mes_fin = 13
+    #Carga de lunes
+    for dia_activo in data['semana']:
+        if dia_activo == "lunes":
+            for mes in range(mes_inicio, mes_fin):
+                micalendario = calendar.monthcalendar(2019, mes)
+                for i in agenda:
+                    if mes == int(i.split("-")[1]):
+                        for j in range(0, 5):
+                            lunes = micalendario[j]             
+                            if lunes[calendar.MONDAY] != 0:
+                                dialunes = lunes[calendar.MONDAY]                  
+                                agenda[i]['lunes']['dias'].append(dialunes)
+                                agenda[i]['lunes']['horario'].append(data['horario'])
+    
+    
+    #Carga de martes
+    for dia_activo in data['semana']:
+        if dia_activo == "martes":
+            for mes in range(mes_inicio, mes_fin):
+                micalendario = calendar.monthcalendar(2019, mes)
+                for i in agenda:
+                    if mes == int(i.split("-")[1]):
+                        for j in range(0, 5):
+                            martes = micalendario[j]
+                            if martes[calendar.TUESDAY] != 0:
+                                diamartes = martes[calendar.TUESDAY]
+                                agenda[i]['martes']['dias'].append(diamartes)
+                                agenda[i]['martes']['horario'].append(data['horario'])
+
+    #Carga de miercoes
+    for dia_activo in data['semana']:
+        if dia_activo == "miercoles":
+            for mes in range(mes_inicio, mes_fin):
+                micalendario = calendar.monthcalendar(2019, mes)
+                for i in agenda:
+                    if mes == int(i.split("-")[1]):
+                        for j in range(0, 5):
+                            miercoles = micalendario[j]
+                            if miercoles[calendar.WEDNESDAY] != 0:
+                                diamiercoles = miercoles[calendar.WEDNESDAY]
+                                agenda[i]['miercoles']['dias'].append(diamiercoles)
+                                agenda[i]['miercoles']['horario'].append(data['horario'])
+
+    #Carga de juebes
+    for dia_activo in data['semana']:
+        if dia_activo == "jueves":
+            for mes in range(mes_inicio, mes_fin):
+                micalendario = calendar.monthcalendar(2019, mes)
+                for i in agenda:
+                    if mes == int(i.split("-")[1]):
+                        for j in range(0, 5):
+                            jueves = micalendario[j]
+                            if jueves[calendar.WEDNESDAY] != 0:
+                                diajueves = jueves[calendar.THURSDAY]
+                                agenda[i]['jueves']['dias'].append(diajueves)
+                                agenda[i]['jueves']['horario'].append(data['horario'])
+    
+    #Carga de viernes
+    for dia_activo in data['semana']:
+        if dia_activo == "viernes":
+            for mes in range(mes_inicio, mes_fin):
+                micalendario = calendar.monthcalendar(2019, mes)
+                for i in agenda:
+                    if mes == int(i.split("-")[1]):
+                        for j in range(0, 5):
+                            viernes = micalendario[j]
+                            if viernes[calendar.WEDNESDAY] != 0:
+                                diaviernes = viernes[calendar.FRIDAY]
+                                agenda[i]['viernes']['dias'].append(diaviernes)
+                                agenda[i]['viernes']['horario'].append(data['horario'])
+    
+    #Carga de Sabado
+    for dia_activo in data['semana']:
+        if dia_activo == "sabado":
+            for mes in range(mes_inicio, mes_fin):
+                micalendario = calendar.monthcalendar(2019, mes)
+                for i in agenda:
+                    if mes == int(i.split("-")[1]):
+                        for j in range(0, 5):
+                            sabado = micalendario[j]
+                            if sabado[calendar.WEDNESDAY] != 0:
+                                diasabado = sabado[calendar.SATURDAY]
+                                agenda[i]['sabado']['dias'].append(diasabado)
+                                agenda[i]['sabado']['horario'].append(data['horario'])
+    
+    #Carga de Domingo
+    for dia_activo in data['semana']:
+        if dia_activo == "domingo":
+            for mes in range(mes_inicio, mes_fin):
+                micalendario = calendar.monthcalendar(2019, mes)
+                for i in agenda:
+                    if mes == int(i.split("-")[1]):
+                        for j in range(0, 5):
+                            domingo = micalendario[j]
+                            if domingo[calendar.WEDNESDAY] != 0:
+                                diadomingo = domingo[calendar.SUNDAY]
+                                agenda[i]['domingo']['dias'].append(diadomingo)
+                                agenda[i]['domingo']['horario'].append(data['horario'])
+
+    return agenda
 
 @db_session()
 def speciality_add():
@@ -93,36 +243,99 @@ def user_add():
 
 @db_session()
 def agenda_load():
-        months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto",
-                        "Septiembre","Octubre","Noviembre","Diciembre"]
-        
-        days = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
-                "16","17","18","19","20","21","22","23","24","25","26","27",
-                "28","29","30","31"]
+    data = {'semana': ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'], 
+    'horario': ['10', '11', '12'], 'medicid': '200', 'medico': 1, 'name': 'geremias', 'lastname': 'avogadro',
+     'userid': 'gere182', 'password': 'abc123', 'specialization': 'pediatra,cardiologo'}
+    print("output 1")
+    nonempty_spec_list = []
+    nonempty_spec_list_id = []
+    magenda = agenda_cargador(data)
+    print("salida:")
+    print(data)
 
-        hours = ["10","11","12"]
+    #Genera una nueva lista de especialidades si esta no
+    #existiere
+    for spec in data['specialization'].split(","):
+        if not Speciality.get(name=spec):
+            Speciality(name=spec)
+            commit()
+    
+    print("output 2")
+    
+    #Suma al nuevo medico a la lista de especialidades
+    for spec in data['specialization'].split(","):
+        query = "m for m in Medic if m.speciality.name == '{}' and m.medicid == '{}'".format(spec,data['medicid'])
+        cmdquery = select(query)[:]
 
-        monthday_array = []
-        
-        #List medics
-        mquery = select(m for m in Medic)[:]
-        list_medics = {'medic_list': [m.to_dict() for m in mquery]}
+        if cmdquery:
+            nonempty_spec_list.append(False)
+        else:
+            nonempty_spec_list.append(spec)
+    
+    print("output 3")
 
-        for m in months:
-                for d in days:
-                        monthday = m + "-" + d
+
+    for i in nonempty_spec_list:
+        nonempty_spec_list_id.append(Speciality.get(name=i))
+    
+    print("output 4")
+    
+    
+    for i in nonempty_spec_list_id:
+        if i:
+            Medic(name=data['name'], lastname=data['lastname'],
+                    medicid=data['medicid'], patient=None, speciality=i)
+            commit()
+
+    print("output 5")
+    
+    #Genera una agenda libre para el medico
+    query = "m for m in Medic if m.speciality.name == '{}' and m.medicid == '{}'".format(spec,data['medicid'])
+    cmdquery = select(query)[:]
+    dbmedicid = cmdquery[0]
+    
+    months = ["Enero-1","Febrero-2","Marzo-3","Abril-4","Mayo-5","Junio-6",
+            "Julio-7","Agosto-8",
+            "Septiembre-9","Octubre-10","Noviembre-11","Diciembre-12"]
+    
+    
+    dias = ["lunes","martes","miercoles","jueves","viernes","sabado","domingo"]
+
+
+    hours = ["10","11","12"]
+
+    
+    monthday_array = []
+
+
+    for k, v in magenda.items():
+        if v['lunes']['dias'] or v['martes']['dias'] or v['miercoles']['dias'] \
+            or v['jueves']['dias'] or v['viernes']['dias'] or v['sabado']['dias'] \
+                or v['domingo']['dias']:
+            
+
+            for d in dias:
+                for tdias in v[d]['dias']:
+                    for hr in v[d]['horario'][0]:
+                        monthday = k + "/" + d + "-" + str(tdias) + "/" + str(hr)
                         monthday_array.append(monthday)
+    
+    print("output 6")
+    
 
-        
-        for med in list_medics['medic_list']:
-                for md in monthday_array:
-                        for hr in hours:
-                                
-                                Agenda(date=md, state=0, hour=hr,
-                                        medico=int(med['id']))
-                                commit()
+    for md in monthday_array:
+        Agenda(date=md, state=0, hour=md.split("/")[2], medico=dbmedicid.id)
+        commit()
+    
 
-@db_session()
+    newuser = User(name=data['name'], lastname=data['lastname'],
+                userid=data['userid'], password=data['password'],
+                medicid=data['medicid'],rol="medic")
+    commit()
+    print("comiteo")
+
+    return True
+
 def set_speciality():
         a = Medic[1]
         a.speciality = Speciality[1]
@@ -144,6 +357,6 @@ speciality_add()
 #medic_add()
 patient_add()
 user_add()
-#agenda_load()
+agenda_load()
 #set_speciality()
-#init_turnos()
+init_turnos()

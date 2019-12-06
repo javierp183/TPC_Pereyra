@@ -14,8 +14,6 @@
       <h1>Nombre de Operador: {{ context.6.operator.name }} </h1>
       <h1>Apellido: {{ context.6.operator.lastname }} </h1>
       <p>Usuario:  {{ context.6.operator.userid }} </p>
-
-      {{ context.7.ingreso1 }}
       
     <form method="POST">      
       
@@ -52,9 +50,6 @@
           {%set dias = z['days']%}
           {%set dates = z['months']%}
           {%if context.7.ingreso1%}
-          
-
-          
           
           <select class="chosen-select" tabindex="5" name="mes">
                 {%for h in hr%}<option value="{{ dates[loop.index0].split('/')[0] }}" {%if context.7.ingreso2 == "Diciembre-12" | string%} selected="selected"{%endif%}>{{ dates[loop.index0] }}</option>{%endfor%}
@@ -98,3 +93,6 @@
 
       <p>Presione el boton para añadir especialidad:</p>
       <button type="button"><a href="/agregar_especialidad/{{ context.6.operator.userid }}">Añadir especialidad</a></button>
+
+      <p>Presione el boton para ver los turnos actualmente asignados:</p>
+      <button type="button"><a href="/ver_turnos/{{ context.6.operator.userid }}">Ver turnos asignados</a></button>

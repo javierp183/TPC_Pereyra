@@ -416,21 +416,24 @@ class Assignation:
         comment = data['comments']
         medictype = False
         inc = 0
+        print(hour)
+        print(date)
+        print(idmedic)
 
 
-        query = "a for a in Agenda if a.date == '{}' and a.medico.id == '{}' and a.hour == '{}'".format(date, idmedic, hour)
-        cmdquery = select(query)
-        if not cmdquery:
-            medictype = True
-            idmedic = int(idmedic)
-            idmedic = idmedic + 1
-            query = "a for a in Agenda if a.date == '{}' and a.medico.id == '{}' and a.hour == '{}'".format(date, idmedic, hour)
-            cmdquery = select(query)
-        obj = cmdquery.get()
+        query = "a for a in Agenda if a.date == '{}' and a.medico.medicid == '{}' and a.hour == '{}'".format(date, idmedic, hour)
+        cmdquery = select(query)[:]
+        print(cmdquery)
+        # if not cmdquery:
+        #     medictype = True
+        #     idmedic = int(idmedic)
+        #     idmedic = idmedic + 1
+        #     query = "a for a in Agenda if a.date == '{}' and a.medico.medicid == '{}' and a.hour == '{}'".format(date, idmedic, hour)
+        #     cmdquery = select(query)
+        obj = cmdquery[0]
 
 
         # Valida si el estado del medico se encuentra disponible.
-
         if obj.state == False:
             p = Patient.get(dni=patientdni).id
             pemail = Patient.get(dni=patientdni).email
@@ -439,18 +442,18 @@ class Assignation:
             obj.date = date
             obj.hour = hour
 
-            if medictype == True:
-                idmedic = idmedic - 1
-                obj.medico = idmedic
-            else:
-                obj.medico = idmedic
+            # if medictype == True:
+            #     idmedic = idmedic - 1
+            #     obj.medico = idmedic
+            # else:
+            #     obj.medico = idmedic
             
             obj.patient = p
             obj.comments = comment
             obj.state = 1
 
             #Obtengo nombre del medico
-            nombre_medico = Medic.get(id=idmedic).name
+            nombre_medico = obj.medico.name
 
             #Genera un turno.
             a = Turno[1]
@@ -783,5 +786,3 @@ class Usermgmt:
         """ Obtain medic id number """
         medicid = User.get(userid=data['userid']).medicid
         return medicid
-
-
