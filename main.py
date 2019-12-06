@@ -73,10 +73,16 @@ def medic_assigned():
     pass
 
 @route('/agregar_especialidad/<ops>', method=["GET","POST"])
+@db_session
 @view('agregar_especialidades.tpl', template_lookup=['views'])
 def agregar_especialidad(ops):
     if request.forms.get('volver') == "volver":
         return redirect('/operator/{}'.format(ops))
+    
+    if request.forms.get("name") != None:
+        Speciality(name=request.forms.get("name"))
+        commit()
+        print("nueva especialidad guardada")
     pass
 
 
@@ -166,7 +172,7 @@ def addmedic(ops):
         form_data['horario'].append(request.forms.get('turno2'))
         form_data['horario'].append(request.forms.get('turno3'))
         form_data['medicid'] = request.forms.get('medicid')
-        form_data['specialization'] = request.forms.get('specialization').lower()
+        #form_data['specialization'] = request.forms.get('specialization').lower()
         form_data['medico'] = 1
         form_data['password'] = request.forms.get('password')
 
@@ -374,6 +380,9 @@ def main_useradd_index(ops):
         'medico': ''
 
     }
+    obj = DBobjects().loadobjects()
+    especialidades = []
+    string = ""
 
     try:
         if not User.get(userid=ops).rol == 'admin':
@@ -415,9 +424,18 @@ def main_useradd_index(ops):
         form_data['horario'].append(request.forms.get('turno2'))
         form_data['horario'].append(request.forms.get('turno3'))
         form_data['medicid'] = request.forms.get('medicid')
-        form_data['specialization'] = request.forms.get('specialization').lower()
+        #form_data['specialization'] = request.forms.get('specialization').lower()
         form_data['medico'] = 1
         form_data['password'] = request.forms.get('password')
+
+        for i in obj[2]['spec_data']:
+            if request.forms.get(i['name']) != None:
+                especialidades.append(i['name'])
+        
+        for palabra in especialidades:
+            string = string + palabra + ","
+        
+        form_data['specialization'] = string[:-1]
         
         if not form_data['name']:
             return "Complete todos los campos!"
@@ -445,7 +463,7 @@ def main_useradd_index(ops):
         return "Usuario creado"
 
     
-    obj = DBobjects().loadobjects()
+    
     print(obj)
 
     return dict(context=obj)

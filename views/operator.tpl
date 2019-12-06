@@ -8,6 +8,8 @@
       <link rel="stylesheet" href="/static/css/style.css">
       <link rel="stylesheet" href="/static/css/prism.css">
       <link rel="stylesheet" href="/static/css/chosen.css">
+
+      
       
       <h1>Nombre de Operador: {{ context.6.operator.name }} </h1>
       <h1>Apellido: {{ context.6.operator.lastname }} </h1>

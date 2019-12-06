@@ -299,23 +299,14 @@ class DBobjects:
         return allobjects
 
 
-    def get_free_time_by_medic_id(self, id):
+    def get_free_time_by_medic_id(self, medicid):
         data = {}
-        id = int(id) + 1
-        if Medic.exists(id=int(id)):
-            id = str(id)
-            print("desde get_free_time_by_medic_id")
-            print(id)
-        else:
-            id = int(id) - 1
-            id = str(id)
-        
 
-        query = "m for m in Agenda if m.medico.id == {} and m.state == False".format(id)
+        query = "m for m in Agenda if m.medico.medicid == {} and m.state == False".format(medicid)
         cmdquery = select(query)[:]
 
         for i in cmdquery:
-            data[i.medico.id] = {
+            data[i.medico.medicid] = {
                 'hours':[],
                 'months': [],
                 'days': {
@@ -326,28 +317,26 @@ class DBobjects:
 
         
         # months Flags
-        bseptiembre = 0
-        boctubre = 0
         bnoviembre = 0
         bdiciembre = 0
 
         for i in cmdquery:
             if i.date.split("/")[0] == "Noviembre-11":
                 mdatos = i.date.split("/")[1] + " Hora:" + i.date.split("/")[2]
-                data[i.medico.id]['days']['Noviembre-11'].append(mdatos)
+                data[i.medico.medicid]['days']['Noviembre-11'].append(mdatos)
                 bnoviembre = True
             elif i.date.split("/")[0] == "Diciembre-12":
                 mdatos = i.date.split("/")[1] + " Hora:" + i.date.split("/")[2]
-                data[i.medico.id]['days']['Diciembre-12'].append(mdatos)
+                data[i.medico.medicid]['days']['Diciembre-12'].append(mdatos)
                 bdiciembre = True
 
         if bnoviembre:
-            data[int(id)]['months'].append("Noviembre-11")
-            data[int(id)]['hours'].append("10")
+            data[int(medicid)]['months'].append("Noviembre-11")
+            data[int(medicid)]['hours'].append("10")
         
         if bdiciembre:
-            data[int(id)]['months'].append("Diciembre-12")
-            data[int(id)]['hours'].append("10")
+            data[int(medicid)]['months'].append("Diciembre-12")
+            data[int(medicid)]['hours'].append("10")
 
         return data
     
@@ -537,6 +526,7 @@ class Assignation:
         for i in dbdata[2]['spec_data']:
             medicgroups[i['name']]['spec_id'].append(i['id'])
         
+        
         print(dbdata[2])
 
 
@@ -546,7 +536,7 @@ class Assignation:
                     if z['speciality'] == j:
                         medicgroups[i['name']]['name'].append(z['name'])
                         medicgroups[i['name']]['lastname'].append(z['lastname'])
-                        medicgroups[i['name']]['idmedic'].append(z['id'])
+                        medicgroups[i['name']]['idmedic'].append(z['medicid'])
         
         
         print(dbdata[1])
