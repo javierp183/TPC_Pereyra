@@ -416,20 +416,10 @@ class Assignation:
         comment = data['comments']
         medictype = False
         inc = 0
-        print(hour)
-        print(date)
-        print(idmedic)
 
 
         query = "a for a in Agenda if a.date == '{}' and a.medico.medicid == '{}' and a.hour == '{}'".format(date, idmedic, hour)
         cmdquery = select(query)[:]
-        print(cmdquery)
-        # if not cmdquery:
-        #     medictype = True
-        #     idmedic = int(idmedic)
-        #     idmedic = idmedic + 1
-        #     query = "a for a in Agenda if a.date == '{}' and a.medico.medicid == '{}' and a.hour == '{}'".format(date, idmedic, hour)
-        #     cmdquery = select(query)
         obj = cmdquery[0]
 
 
@@ -441,12 +431,6 @@ class Assignation:
             date_splited = date.split("/")[0] + "/" + date.split("/")[1]
             obj.date = date
             obj.hour = hour
-
-            # if medictype == True:
-            #     idmedic = idmedic - 1
-            #     obj.medico = idmedic
-            # else:
-            #     obj.medico = idmedic
             
             obj.patient = p
             obj.comments = comment
@@ -531,8 +515,6 @@ class Assignation:
         for i in dbdata[2]['spec_data']:
             medicgroups[i['name']]['spec_id'].append(i['id'])
         
-        
-        print(dbdata[2])
 
 
         for i in dbdata[2]['spec_data']:
@@ -543,9 +525,6 @@ class Assignation:
                         medicgroups[i['name']]['lastname'].append(z['lastname'])
                         medicgroups[i['name']]['idmedic'].append(z['medicid'])
         
-        
-        print(dbdata[1])
-
 
         return medicgroups
     

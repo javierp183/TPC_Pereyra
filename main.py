@@ -96,24 +96,52 @@ def turno_asignado():
 @db_session
 @view('ver_turnos.tpl', template_lookup=['views'])
 def ver_turnos(ops):
+    """ Medic Main Index """
+    dbdata = DBobjects().loadobjects()
+    medic="none"
+
 
     try:
         if request.method == 'POST':
-            medicid = request.forms.get("medicid")
-            dbdata = DBobjects().loadobjects()
-            medic = Assignation.medicagenda(medicid,dbdata)
+            if request.forms.get('buscar') == "buscar":
+                medicid = request.forms.get("medicid")
+                assign = Assignation.medicagenda(medicid,dbdata)
+                return dict(context=assign)
     except:
-        pass
+        return "Ingrese MedicID valido, <a href='/ver_turnos/{}'>volver atras</a>".format(ops)
+    
+
+    
+    # try:
+    #     if User.get(medicid=medicid).rol == 'medic':
+    #         print("este es un usuario medico")
+    #     else:
+    #         return redirect('/wrongmedic')
+    # except AttributeError:
+    #     return redirect('/wrongmedic')
+
+    # medicid = 0
+    # if request.method == 'POST':
+    #     if request.forms.get('volver') == "volver":
+    #         return redirect('/operator/{}'.format(ops))
+        
+    #     if request.forms.get('buscar') == "buscar":
+    #         print("salida")
+    #         print("entrada")
+    #         medicid = request.forms.get('medicid')
+    #         medic = Assignation.medicagenda(medicid,dbdata)
+    #         return dict(context=medic)
 
     # dbdata = DBobjects().loadobjects()
     # medic = Assignation.medicagenda(medicid,dbdata)
     # estado_salida = dict(request.params)
-    print("salida de la agenda del medico:")
-    print(medic)
-    medic = {'out':'data'}
 
-
+    # medic = "out"
     return dict(context=medic)
+    pass
+    #return dict(context=medic)
+    
+
 
 
 @route('/medicanonssigned')
@@ -196,7 +224,6 @@ def addmedic(ops):
         form_data['horario'].append(request.forms.get('turno2'))
         form_data['horario'].append(request.forms.get('turno3'))
         form_data['medicid'] = request.forms.get('medicid')
-        #form_data['specialization'] = request.forms.get('specialization').lower()
         form_data['medico'] = 1
         form_data['password'] = request.forms.get('password')
 
@@ -232,9 +259,6 @@ def addmedic(ops):
     create = Usermgmt()
     if create.adduser(form_data):
         return "Usuario creado!!!, <a href='/useradd/{}'>volver atras</a>".format(ops)
-        print(form_data)
-    
-
     
     return dict(context=obj)
 
@@ -449,7 +473,6 @@ def main_useradd_index(ops):
         form_data['horario'].append(request.forms.get('turno2'))
         form_data['horario'].append(request.forms.get('turno3'))
         form_data['medicid'] = request.forms.get('medicid')
-        #form_data['specialization'] = request.forms.get('specialization').lower()
         form_data['medico'] = 1
         form_data['password'] = request.forms.get('password')
 
@@ -487,9 +510,6 @@ def main_useradd_index(ops):
     if create.adduser(form_data):
         return "Usuario creado, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
-    
-    
-    print(obj)
 
     return dict(context=obj)
 
@@ -635,10 +655,15 @@ def main_operator_reassignation_index(ops):
     alldata = DBobjects().loadobjects()
     alldata.append(dict(currentdata=current))
 
+
+    if request.forms.get('volver') == "volver":
+        return redirect('/operator/{}'.format(ops))
+
+
     if request.method == 'POST':
         data = dict(request.forms)
         Assignation().reassignation(data['current'],data['newtime'])
-        return "Turno reasignado!!!, , <a href='/operator/reassignation/{}'>volver atras</a>".format(ops)
+        return "Turno reasignado!!!, <a href='/operator/reassignation/{}'>volver atras</a>".format(ops)
     
     return dict(context=alldata)
 

@@ -3,7 +3,7 @@
   <button type="submit" name="operador" value="operador">Ingreso de operador</button>
   <button type="submit" name="paciente" value="paciente">Ingreso de paciente</button>
   <button type="submit" name="volver" value="volver">Volver atras</a></button>
-  </form>
+</form>
   
   Ingresar Medico:
   <form method="POST">
