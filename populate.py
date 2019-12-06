@@ -141,9 +141,9 @@ def init_turnos():
 # # --------------------------------------------------------------------------- #
 
 speciality_add()
-medic_add()
+#medic_add()
 patient_add()
 user_add()
-agenda_load()
-set_speciality()
-init_turnos()
+#agenda_load()
+#set_speciality()
+#init_turnos()

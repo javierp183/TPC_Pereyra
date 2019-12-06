@@ -40,13 +40,16 @@
       <form method="POST">
 
       {%if context.8 is defined%}
-      
+
           {%for x, z in context.8.items() %}
           {%set y = x | string%}
           {%set hr = z['hours']%}
           {%set dias = z['days']%}
           {%set dates = z['months']%}
-          {%if context.7.ingreso1 == y%}
+          {%if context.7.ingreso1%}
+          
+
+          
           
           <select class="chosen-select" tabindex="5" name="mes">
                 {%for h in hr%}<option value="{{ dates[loop.index0].split('/')[0] }}" {%if context.7.ingreso2 == "Diciembre-12" | string%} selected="selected"{%endif%}>{{ dates[loop.index0] }}</option>{%endfor%}
@@ -87,3 +90,6 @@
       
       <p>Presione el boton para borrar usuarios:</p>
       <button type="button"><a href="/userdel/{{ context.6.operator.userid }}">Borrar usuarios</a></button>
+
+      <p>Presione el boton para añadir especialidad:</p>
+      <button type="button"><a href="/agregar_especialidad/{{ context.6.operator.userid }}">Añadir especialidad</a></button>

@@ -1,8 +1,8 @@
-
 <form method="POST">
 <button type="submit" name="medico" value="medico">Ingreso de medico</button>
 <button type="submit" name="operador" value="operador">Ingreso de operador</button>
 <button type="submit" name="paciente" value="paciente">Ingreso de paciente</button>
+<button type="submit" name="volver" value="volver">Volver atras</a></button>
 </form>
 
 Ingresar Medico:
@@ -10,7 +10,6 @@ Ingresar Medico:
     Nombre: <input type="text" name="name"><br>
     Apellido: <input type="text" name="lastname"><br>
     Registre Usuario: <input type="text" name="userid"><br>
-    Especializacion: <input type="text" name="specialization"><br>
     ID del Medico: <input type="text" name="medicid"><br>
     Clave para el Usuario: <input type="password" name="password"><br>
   Dias de trabajo <br>
@@ -79,9 +78,15 @@ Horarios de trabajo: <br>
   <th>
       <input type="checkbox" name="turno3" value=12>  12 AM
   </th>
-
 </table>
+
+Especializades: <br>
+{%for i in context.2.spec_data%}
+<input type="checkbox" name="{{ i.name }}" value="{{ i.name }}">{{ i.name }}
+{%endfor%} 
+<br>
 
 <button type="submit">Ingresar medico</button>
 
 </form>
+

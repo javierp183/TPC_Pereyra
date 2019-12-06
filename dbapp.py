@@ -301,6 +301,16 @@ class DBobjects:
 
     def get_free_time_by_medic_id(self, id):
         data = {}
+        id = int(id) + 1
+        if Medic.exists(id=int(id)):
+            id = str(id)
+            print("desde get_free_time_by_medic_id")
+            print(id)
+        else:
+            id = int(id) - 1
+            id = str(id)
+        
+
         query = "m for m in Agenda if m.medico.id == {} and m.state == False".format(id)
         cmdquery = select(query)[:]
 
@@ -314,8 +324,10 @@ class DBobjects:
                 }
             }
 
-
-        # months Flags 
+        
+        # months Flags
+        bseptiembre = 0
+        boctubre = 0
         bnoviembre = 0
         bdiciembre = 0
 
@@ -336,9 +348,6 @@ class DBobjects:
         if bdiciembre:
             data[int(id)]['months'].append("Diciembre-12")
             data[int(id)]['hours'].append("10")
-
-
-
 
         return data
     
@@ -527,6 +536,8 @@ class Assignation:
         
         for i in dbdata[2]['spec_data']:
             medicgroups[i['name']]['spec_id'].append(i['id'])
+        
+        print(dbdata[2])
 
 
         for i in dbdata[2]['spec_data']:
@@ -536,6 +547,9 @@ class Assignation:
                         medicgroups[i['name']]['name'].append(z['name'])
                         medicgroups[i['name']]['lastname'].append(z['lastname'])
                         medicgroups[i['name']]['idmedic'].append(z['id'])
+        
+        
+        print(dbdata[1])
 
 
         return medicgroups
@@ -705,6 +719,8 @@ class Usermgmt:
                             medicid=data['medicid'],rol="medic")
                 commit()
                 print("comiteo")
+
+                return True
         except:
             pass
 
@@ -715,6 +731,8 @@ class Usermgmt:
                             rol="admin")
                 commit()
                 print("comiteo")
+
+                return True
         except:
             pass
 
@@ -725,6 +743,8 @@ class Usermgmt:
                     dni=data['dni'], email=data['email'])
                     commit()
                     print("comiteo")
+
+                    return True
         except:
             pass
 
