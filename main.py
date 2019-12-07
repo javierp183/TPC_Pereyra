@@ -491,6 +491,43 @@ def main_useradd_index(ops):
     return dict(context=obj)
 
 
+@route('/userdel_paciente/<ops>', method=["GET","POST"])
+@db_session
+@view('userdel_paciente.tpl', template_lookup=['views'])
+def main_userdel_paciente_index(ops):
+    if User.get(userid=ops).rol == 'admin':
+        print("este es un usuario admin")
+    else:
+        return redirect('/wrongops')
+
+    try:
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
+        elif request.forms.get('operador') == "operador":
+            return redirect('/userdel_operador/{}'.format(ops))
+        elif request.forms.get('paciente') == "paciente":
+            return redirect('/userdel_paciente/{}'.format(ops))
+        elif request.forms.get('medico') == "medico":
+            return redirect('/userdel/{}'.format(ops))
+        
+        if request.method == 'POST':
+            print("test")
+            userid = request.forms.get('userid')
+            userid = str(userid)
+            if User.exists(userid=userid):
+                obj = User.get(userid=userid)
+                nombre = obj.name
+                apellido = obj.lastname
+                obj.delete()
+                commit()
+                return "Operador {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
+            else:
+                return "El USERID no existe!, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
+    except ValueError:
+        return "Ingrese un userid valido, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
+
+
+
 @route('/userdel_operador/<ops>', method=["GET","POST"])
 @db_session
 @view('userdel_operador.tpl', template_lookup=['views'])
@@ -511,11 +548,10 @@ def main_userdel_operador_index(ops):
             return redirect('/userdel/{}'.format(ops))
         
         if request.method == 'POST':
-            userid = int(request.forms.get('userid'))
+            print("test")
+            userid = request.forms.get('userid')
             userid = str(userid)
-            print(userid)
             if User.exists(userid=userid):
-                print("que onda mono?")
                 obj = User.get(userid=userid)
                 nombre = obj.name
                 apellido = obj.lastname
