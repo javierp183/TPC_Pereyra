@@ -491,22 +491,84 @@ def main_useradd_index(ops):
     return dict(context=obj)
 
 
+@route('/userdel_operador/<ops>', method=["GET","POST"])
+@db_session
+@view('userdel_operador.tpl', template_lookup=['views'])
+def main_userdel_operador_index(ops):
+    if User.get(userid=ops).rol == 'admin':
+        print("este es un usuario admin")
+    else:
+        return redirect('/wrongops')
+
+    try:
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
+        elif request.forms.get('operador') == "operador":
+            return redirect('/userdel_operador/{}'.format(ops))
+        elif request.forms.get('paciente') == "paciente":
+            return redirect('/userdel_paciente/{}'.format(ops))
+        elif request.forms.get('medico') == "medico":
+            return redirect('/userdel/{}'.format(ops))
+        
+        if request.method == 'POST':
+            userid = int(request.forms.get('userid'))
+            userid = str(userid)
+            print(userid)
+            if User.exists(userid=userid):
+                print("que onda mono?")
+                obj = User.get(userid=userid)
+                nombre = obj.name
+                apellido = obj.lastname
+                obj.delete()
+                commit()
+                return "Operador {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
+            else:
+                return "El USERID no existe!, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
+    except ValueError:
+        return "Ingrese un userid valido, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
+    
+
 
 @route('/userdel/<ops>', method=["GET","POST"])
 @db_session
 @view('userdel.tpl', template_lookup=['views'])
 def main_userdel_index(ops):
     """ Main UserAdd Index """
-    data = dict(request.forms)
 
     if User.get(userid=ops).rol == 'admin':
         print("este es un usuario admin")
     else:
         return redirect('/wrongops')
+
+    try:
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
+        elif request.forms.get('operador') == "operador":
+            return redirect('/userdel_operador/{}'.format(ops))
+        elif request.forms.get('paciente') == "paciente":
+            return redirect('/userdel_paciente/{}'.format(ops))
+        elif request.forms.get('medico') == "medico":
+            return redirect('/userdel/{}'.format(ops))
+        
+        if request.method == 'POST':
+            medicid = int(request.forms.get('medicid'))
+            if User.exists(medicid=medicid):
+                obj = User.get(medicid=medicid)
+                nombre = obj.name
+                apellido = obj.lastname
+                obj.delete()
+                commit()
+                return "Medico {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
+            else:
+                return "El MEDICID no existe!, <a href='/userdel/{}'>volver atras</a>".format(ops)
+    except ValueError:
+        return "Ingrese un medicid valido, <a href='/userdel/{}'>volver atras</a>".format(ops)
     
 
-    create = Usermgmt()
-    create.deleteuser(data)
+    
+
+    # create = Usermgmt()
+    # create.deleteuser(data)
 
     return dict(context={'output': 'none'})
 
@@ -582,33 +644,37 @@ def main_operator_index(ops):
     ingresos['ingreso1'] = 0
     data.append(ingresos)
 
-    if request.method == 'POST':
-        query = request.forms.get('medic')
-        query2 = query.split("-")[1]
-        query = query.split("-")[0] 
-        ingresos['ingreso0'] = query2
-        ingresos['ingreso1'] = query
-        ingresos['ingreso2'] = request.forms.get('mes')
-        ingresos['ingreso3'] = request.forms.get('dias')
-        ingresos['patient'] = request.forms.get('patient')
-        ingresos['comments'] = request.forms.get('comments')
-        ingresos['turno'] = request.forms.get('turno')
-        query = request.forms.get('medic')
-        buscar = DBobjects()
-        salida = buscar.get_free_time_by_medic_id(query)
-        salida2 = buscar.get_free_days(query)
-        data.append(salida)
-        data.append(salida2)
-        if ingresos['turno'] == "Ingresar":
-            doassign = Assignation()
-            out = doassign.medicassign(ingresos)
-            if out == "ok":
-                print("test 2")
-                return template('turno_asignado.tpl', context=ops)
-            elif out == "error":
-                return "Horario no valido, vuelva atras e ingrese un horario valido"
+
+    try:
+        if request.method == 'POST':
+            query = request.forms.get('medic')
+            query2 = query.split("-")[1]
+            query = query.split("-")[0] 
+            ingresos['ingreso0'] = query2
+            ingresos['ingreso1'] = query
+            ingresos['ingreso2'] = request.forms.get('mes')
+            ingresos['ingreso3'] = request.forms.get('dias')
+            ingresos['patient'] = request.forms.get('patient')
+            ingresos['comments'] = request.forms.get('comments')
+            ingresos['turno'] = request.forms.get('turno')
+            query = request.forms.get('medic')
+            buscar = DBobjects()
+            salida = buscar.get_free_time_by_medic_id(query)
+            salida2 = buscar.get_free_days(query)
+            data.append(salida)
+            data.append(salida2)
+            if ingresos['turno'] == "Ingresar":
+                doassign = Assignation()
+                out = doassign.medicassign(ingresos)
+                if out == "ok":
+                    print("test 2")
+                    return template('turno_asignado.tpl', context=ops)
+                elif out == "error":
+                    return "Horario o entrada no valido, vuelva atras, actualize e ingrese un horario valido, <a href='/operator/{}'>volver atras</a>".format(ops)
         else:
             print(" test re loco ")
+    except AttributeError:
+        pass
             
 
     return dict(context=data)

@@ -424,7 +424,10 @@ class Assignation:
 
         query = "a for a in Agenda if a.date == '{}' and a.medico.medicid == '{}' and a.hour == '{}'".format(date, idmedic, hour)
         cmdquery = select(query)[:]
-        obj = cmdquery[0]
+        try:
+            obj = cmdquery[0]
+        except IndexError:
+            return "error"
 
 
         # Valida si el estado del medico se encuentra disponible.
