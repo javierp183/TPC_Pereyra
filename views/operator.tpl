@@ -18,22 +18,19 @@
 
           <em>Elegir medico y especialidad</em>
               <select class="chosen-select" tabindex="5" name="medic">
-
                   {%for q, b in context.4.select_data.items()%}
                   {%set names = b['name']%}
                   {%set ids = b['idmedic']%}
-                  {{ ids }}
-
                 <optgroup label="{{ q }}">
                     {%for id in ids%}
-                    <option value="{{ id }}" {% if context.7.ingreso1== id | string %} selected="selected" {%endif%}>{{ names[loop.index0] }}</option>
+                    <option value="{{ id }}-{{ q }}" {% if ((context.7.ingreso1 == id | string) and ( q == context.7.ingreso0 )) %} selected="selected" {%endif%}>{{ names[loop.index0] }}</option>
                       {%endfor%}
                     {%endfor%} 
-                </optgroup>
-                
+                </optgroup>  
               </select>
           <button type="submit" name="medico">Ver y actualizar Fechas disponibles</button>
       <form>
+         
 
 
 
@@ -92,4 +89,4 @@
       <button type="button"><a href="/agregar_especialidad/{{ context.6.operator.userid }}">Añadir especialidad</a></button>
 
       <p>Presione el boton para ver los turnos actualmente asignados:</p>
-      <button type="button"><a href="/ver_turnos/{{ context.6.operator.userid }}">Ver turnos asignados</a></button>
+      <button type="button"><a href="/ver_turnos/{{ context.6.operator.userid }}">Ver turnos asignados por codigo de MEDICID</a></button>

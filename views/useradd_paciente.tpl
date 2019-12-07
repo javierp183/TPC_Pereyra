@@ -1,3 +1,7 @@
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/prism.css">
+<link rel="stylesheet" href="/static/css/chosen.css">
+
 <form method="POST">
   <button type="submit" name="medico" value="medico">Ingreso de medico</button>
   <button type="submit" name="operador" value="operador">Ingreso de operador</button>

@@ -51,6 +51,9 @@ from dbapp import DBobjects
 # Datetime
 import datetime
 
+# HTML Parser
+from html.parser import HTMLParser
+
 # Settings and current time
 settings = Loader().settings
 now = datetime.datetime.now()
@@ -542,6 +545,7 @@ def main_doctor_index(medicid):
 @db_session
 @view('operator.tpl', template_lookup=['views'])
 def main_operator_index(ops):
+    print("demossss")
     """ operator Main Index """
     admin_user = {
         'operator': {
@@ -579,7 +583,11 @@ def main_operator_index(ops):
     data.append(ingresos)
 
     if request.method == 'POST':
-        ingresos['ingreso1'] = request.forms.get('medic')
+        query = request.forms.get('medic')
+        query2 = query.split("-")[1]
+        query = query.split("-")[0] 
+        ingresos['ingreso0'] = query2
+        ingresos['ingreso1'] = query
         ingresos['ingreso2'] = request.forms.get('mes')
         ingresos['ingreso3'] = request.forms.get('dias')
         ingresos['patient'] = request.forms.get('patient')
@@ -595,11 +603,13 @@ def main_operator_index(ops):
             doassign = Assignation()
             out = doassign.medicassign(ingresos)
             if out == "ok":
+                print("test 2")
                 return template('turno_asignado.tpl', context=ops)
             elif out == "error":
                 return "Horario no valido, vuelva atras e ingrese un horario valido"
         else:
-            print("nada que asignar")
+            print(" test re loco ")
+            
 
     return dict(context=data)
 

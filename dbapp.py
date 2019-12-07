@@ -301,6 +301,7 @@ class DBobjects:
 
     def get_free_time_by_medic_id(self, medicid):
         data = {}
+        medicid = medicid.split("-")[0]
 
         query = "m for m in Agenda if m.medico.medicid == {} and m.state == False".format(medicid)
         cmdquery = select(query)[:]
@@ -344,6 +345,7 @@ class DBobjects:
     
     def get_free_days(self, id):
         data = {}
+        id = id.split('-')[0]
         query = "m for m in Agenda if m.medico.id == {}".format(id)
         cmdquery = select(query)[:]
 
@@ -416,6 +418,8 @@ class Assignation:
         comment = data['comments']
         medictype = False
         inc = 0
+        print(data)
+
 
 
         query = "a for a in Agenda if a.date == '{}' and a.medico.medicid == '{}' and a.hour == '{}'".format(date, idmedic, hour)
