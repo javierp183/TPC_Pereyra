@@ -96,6 +96,8 @@ class Agenda(db.Entity):
     date = Optional(str)
     state = Optional(bool)
     hour = Optional(str)
+    dni = Optional(int)
+    turno = Optional(int)
     comments = Optional(str)
     medico = Optional(Medic)
     patient = Optional(Patient)

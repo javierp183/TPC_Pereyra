@@ -449,6 +449,8 @@ class Assignation:
             #Genera un turno.
             a = Turno[1]
             a.turno = a.turno + 1
+            obj.turno = a.turno
+            obj.dni = int(patientdni)
             commit()
 
             #Sent email
@@ -506,6 +508,38 @@ class Assignation:
             data['patients']['speciality'].append(i.medico.speciality.name)
 
         return data
+    
+    def buscarpacienteporturno(self,dni):
+        print(dni)
+        turno_paciente = {
+            'nombre': [],
+            'apellido': [],
+            'fecha': [],
+            'hora': [],
+            'comments': [],
+            'nombremedico': [],
+            'apellidomedico': []
+
+        }
+
+        query = "a for a in Agenda if a.dni == '{}' and a.state == True".format(dni)
+        cmdquery = select(query)[:]
+        print(cmdquery)
+        for i in cmdquery:
+            turno_paciente['nombre'].append(i.patient.name)
+            turno_paciente['apellido'].append(i.patient.lastname)
+            turno_paciente['fecha'].append(i.date)
+            turno_paciente['hora'].append(i.hour)
+            turno_paciente['nombremedico'].append(i.medico.name)
+            turno_paciente['apellidomedico'].append(i.medico.lastname)
+           
+        
+        print("array:")
+        print(turno_paciente)
+        
+
+        return turno_paciente
+
 
     def medicbytypes(self,dbdata):
         medicgroups = {}

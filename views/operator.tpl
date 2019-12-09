@@ -23,7 +23,7 @@
                   {%set ids = b['idmedic']%}
                 <optgroup label="{{ q }}">
                     {%for id in ids%}
-                    <option value="{{ id }}-{{ q }}" {% if ((context.7.ingreso1 == id | string) and ( q == context.7.ingreso0 )) %} selected="selected" {%endif%}>{{ names[loop.index0] }}</option>
+                    <option value="{{ id }}-{{ q }}" {% if ((context.7.ingreso1 == id | string) and ( q == context.7.ingreso0 )) %} selected="selected" {%endif%}>{{ names[loop.index0] }} : {{ q }}</option>
                       {%endfor%}
                     {%endfor%} 
                 </optgroup>  
@@ -89,4 +89,4 @@
       <button type="button"><a href="/agregar_especialidad/{{ context.6.operator.userid }}">Añadir especialidad</a></button>
 
       <p>Presione el boton para ver los turnos actualmente asignados:</p>
-      <button type="button"><a href="/ver_turnos/{{ context.6.operator.userid }}">Ver turnos asignados por codigo de MEDICID</a></button>
+      <button type="button"><a href="/ver_turnos/{{ context.6.operator.userid }}">Ver Turnos</a></button>

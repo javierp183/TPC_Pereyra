@@ -100,17 +100,17 @@ def turno_asignado():
 @view('ver_turnos.tpl', template_lookup=['views'])
 def ver_turnos(ops):
     """ Medic Main Index """
-    dbdata = DBobjects().loadobjects()
-    medic="none"
-
+    medic = 0
+    print(request.forms.get('nombre'))
     try:
         if request.method == 'POST':
             if request.forms.get('buscar') == "buscar":
-                medicid = request.forms.get("medicid")
-                assign = Assignation.medicagenda(medicid,dbdata)
-                return dict(context=assign)
+                turno = request.forms.get("dni")
+                turno = int(turno)
+                print(turno)
+                return dict(context=Assignation().buscarpacienteporturno(turno))
     except:
-        return "Ingrese MedicID valido, <a href='/ver_turnos/{}'>volver atras</a>".format(ops)
+        return "Ingrese un Turno valido!!!, <a href='/ver_turnos/{}'>volver atras</a>".format(ops)
     
     if request.method == 'POST':
         if request.forms.get('volver') == "volver":
@@ -512,19 +512,18 @@ def main_userdel_paciente_index(ops):
         
         if request.method == 'POST':
             print("test")
-            userid = request.forms.get('userid')
-            userid = str(userid)
-            if User.exists(userid=userid):
-                obj = User.get(userid=userid)
+            dni = request.forms.get('dni')
+            if Patient.exists(dni=dni):
+                obj = User.get(dni=dni)
                 nombre = obj.name
                 apellido = obj.lastname
                 obj.delete()
                 commit()
-                return "Operador {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
+                return "Paciente {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
             else:
-                return "El USERID no existe!, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
+                return "El DNI no existe!, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
     except ValueError:
-        return "Ingrese un userid valido, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
+        return "Ingrese un DNI valido, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
 
 
 

@@ -14,6 +14,6 @@ Ingrese DNI: <br>
     UserID: <input type="text" name="userid"><br>
 </table>
 
-<button type="submit">Eliminar Operador</button>
+<button type="submit">Eliminar Paciente</button>
 
 </form>
