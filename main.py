@@ -39,6 +39,7 @@ from bottle import route, run, redirect
 from bottle import static_file,response
 from bottle import template
 import bottle
+import json
 
 # Tables / Objects
 from database import Medic, Speciality
@@ -75,6 +76,14 @@ def server_static(filepath):
 def medic_assigned():
     pass
 
+
+@route('/entershowoptions', method=["GET","POST"])
+def showdata():
+    postdata = request.body.read()
+    print("salida de datos del post del ajax:")
+    print(postdata.decode('utf8'))     
+    pass
+
 @route('/agregar_especialidad/<ops>', method=["GET","POST"])
 @db_session
 @view('agregar_especialidades.tpl', template_lookup=['views'])
@@ -104,6 +113,7 @@ def ver_turnos(ops):
     print(request.forms.get('nombre'))
     try:
         if request.method == 'POST':
+            print("re que es post!")
             if request.forms.get('buscar') == "buscar":
                 turno = request.forms.get("dni")
                 turno = int(turno)
