@@ -2,7 +2,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
-{{ context }}
 
 Ingrese DNI del Paciente:
 <form method="POST">
@@ -23,6 +22,7 @@ Ingrese DNI del Paciente:
       <tr>
         <th>Nombre</th>
         <th>Apellido</th>
+        <th>DNI</th>
         <th>Fecha</th>
         <th>Hora de Turno (AM)</th>
         <th>Nombre de Medico</th>
@@ -39,16 +39,17 @@ Ingrese DNI del Paciente:
     {%set nombre_medico_1 = context.nombremedico[loop.index-1]%}
     {%set apellido_medico_1 = context.apellidomedico[loop.index-1]%}
     {%set especialidad_1 = context.especialidad[loop.index-1]%}
+    {%set dni_1 = context.dni[loop.index-1]%}
 
       <tr>
         <td>{{ nombre_1 }}<input type="hidden" name="entry_reg_name" value="{{ nombre_1 }}"></td>
         <td>{{ apellido_1 }}<input type="hidden" name="entry_reg_apellido" value="{{ apellido_1 }}"></td>
+        <td>{{ dni_1 }}<input type="hidden" name="entry_reg_dni" value="{{ dni_1 }}"></td>
         <td>{{ fecha_1 }}<input type="hidden" name="entry_reg_fecha" value="{{ fecha_1 }}"></td>
-        <td>{{ hora_1 }}<input type="hidden" name="entry_reg_fecha" value="{{ hora_1 }}"></td>
+        <td>{{ hora_1 }}<input type="hidden" name="entry_reg_hora" value="{{ hora_1 }}"></td>
         <td>{{ nombre_medico_1 }}<input type="hidden" name="entry_reg_nombre_medico" value="{{ nombre_medico_1 }}"></td>
         <td>{{ apellido_medico_1 }}<input type="hidden" name="entry_reg_apellido_medico" value="{{ apellido_medico_1 }}"></td>
         <td>{{ especialidad_1 }}<input type="hidden" name="entry_reg_especialidad" value="{{ especialidad_1 }}"></td>
-
       </tr>
     </tbody>
     {%endfor%}
@@ -77,29 +78,36 @@ Ingrese DNI del Paciente:
     
       $.ajax({
         type: "POST",
-        url: "/entershowoptions",
+        url: "/anular_turno",
         contentType: "application/json",
         dataType: "json",
         data: selectedRowInputs
       });
+    
+
   });
 
   $('#reasignar_turno').click( function (e) {
     e.preventDefault();
     var selected = JSON.stringify($('.selected input').serializeArray());
+
+
     
     //use the serialized version of selectedRowInputs as the data
     //to be sent to the AJAX request
 
     console.log('serlialized inputs: ',selected);
+
     
       $.ajax({
         type: "POST",
-        url: "/reasignarturno",
+        url: "/anular_turno",
         contentType: "application/json",
         dataType: "json",
         data: selected
       });
+
+
       
   });
 

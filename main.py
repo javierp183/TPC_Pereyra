@@ -84,6 +84,27 @@ def showdata():
     print(postdata.decode('utf8'))     
     pass
 
+@route('/anular_turno', method=["GET","POST"])
+@db_session
+def anular_turno():
+    postdata = request.body.read()
+    dni = json.loads(postdata)[2]
+    fecha = json.loads(postdata)[3]
+    valor_dni = int(dni['value'])
+    print(fecha['value'])
+    query = "a for a in Agenda if a.dni == '{}' and a.date == '{}'".format(valor_dni,fecha['value'])
+    cmdquery = select(query)[:]
+    paciente_a_anular_turno = cmdquery[0]
+    paciente_a_anular_turno.state = False
+    commit()
+    pass
+
+@route('/reasignar_turno', method=["GET","POST"])
+def reasignar_turno():
+    dato = request.forms.get('reasignar_turno')
+    print(dato)
+    pass
+
 @route('/agregar_especialidad/<ops>', method=["GET","POST"])
 @db_session
 @view('agregar_especialidades.tpl', template_lookup=['views'])
@@ -113,7 +134,6 @@ def ver_turnos(ops):
     print(request.forms.get('nombre'))
     try:
         if request.method == 'POST':
-            print("re que es post!")
             if request.forms.get('buscar') == "buscar":
                 turno = request.forms.get("dni")
                 turno = int(turno)
@@ -125,7 +145,6 @@ def ver_turnos(ops):
     if request.method == 'POST':
         if request.forms.get('volver') == "volver":
             return redirect('/operator/{}'.format(ops))
-
 
     return dict(context=medic)
 
@@ -652,7 +671,6 @@ def main_doctor_index(medicid):
 @db_session
 @view('operator.tpl', template_lookup=['views'])
 def main_operator_index(ops):
-    print("demossss")
     """ operator Main Index """
     admin_user = {
         'operator': {
@@ -724,6 +742,86 @@ def main_operator_index(ops):
 
     return dict(context=data)
 
+
+
+@route('/operator/assignation/<ops>', method=["GET","POST"])
+@db_session
+@view('assignation.tpl', template_lookup=['views'])
+def assignation(ops):
+    """ operator Main Index """
+    admin_user = {
+        'operator': {
+        'userid': ops,
+        'name': '',
+        'lastname': ''
+        }
+    }
+    ingresos = {
+        'ingreso1': '',
+        'ingreso2': '',
+        'ingreso3': '',
+        'patient': '',
+        'comments': '',
+        'turno': ''
+    }
+    freetime = {
+        'hours': [],
+        'dates': []
+    }
+
+    data = DBobjects().loadobjects()
+
+    try:
+        admin_user['operator']['name'] = User.get(userid=ops).name
+        admin_user['operator']['lastname'] = User.get(userid=ops).lastname
+    except AttributeError:
+        return "Ingreso no valido!!!, vuelva atras desde el explorador"
+
+    if not User.get(userid=ops).rol == 'admin':
+        return redirect('/wrongops')
+
+    data.append(admin_user)
+    ingresos['ingreso1'] = 0
+    data.append(ingresos)
+
+
+    try:
+        if request.method == 'POST':
+            query = request.forms.get('medic')
+            query2 = query.split("-")[1]
+            query = query.split("-")[0] 
+            ingresos['ingreso0'] = query2
+            ingresos['ingreso1'] = query
+            ingresos['ingreso2'] = request.forms.get('mes')
+            ingresos['ingreso3'] = request.forms.get('dias')
+            ingresos['patient'] = request.forms.get('patient')
+            ingresos['comments'] = request.forms.get('comments')
+            ingresos['turno'] = request.forms.get('turno')
+            query = request.forms.get('medic')
+            buscar = DBobjects()
+            salida = buscar.get_free_time_by_medic_id(query)
+            salida2 = buscar.get_free_days(query)
+            data.append(salida)
+            data.append(salida2)
+            if ingresos['turno'] == "Ingresar":
+                doassign = Assignation()
+                out = doassign.medicassign(ingresos)
+                if out == "ok":
+                    print("test 2")
+                    return template('turno_asignado.tpl', context=ops)
+                elif out == "error":
+                    return "Horario o entrada no valido, vuelva atras, actualize e ingrese un horario valido, <a href='/operator/{}'>volver atras</a>".format(ops)
+        else:
+            print(" test re loco ")
+    except AttributeError:
+        pass
+
+    if request.method == 'POST':
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
+            
+
+    return dict(context=data)
 
 
 @route('/operator/reassignation/<ops>', method=["GET","POST"])

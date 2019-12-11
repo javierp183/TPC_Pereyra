@@ -519,7 +519,8 @@ class Assignation:
             'comments': [],
             'nombremedico': [],
             'apellidomedico': [],
-            'especialidad': []
+            'especialidad': [],
+            'dni': []
 
         }
 
@@ -534,12 +535,7 @@ class Assignation:
             turno_paciente['nombremedico'].append(i.medico.name)
             turno_paciente['apellidomedico'].append(i.medico.lastname)
             turno_paciente['especialidad'].append(i.medico.speciality.name)
-
-           
-        
-        print("array:")
-        print(turno_paciente)
-        
+            turno_paciente['dni'].append(i.patient.dni)
 
         return turno_paciente
 
