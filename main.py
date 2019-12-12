@@ -88,8 +88,12 @@ def lista_medicos(ops):
 @db_session
 @view('listar_operadores.tpl', template_lookup=['views'])
 def lista_operadores(ops):
-    obj = DBobjects().loadobjects()
-    return dict(context=obj)
+    #Obtener lista completa de operadores
+    operadores = select(o for o in User if o.rol == 'admin')[:]
+    datos_operadores = {'op_data': [o.to_dict() for o in operadores]}
+
+    
+    return dict(context=datos_operadores)
 
 
 @route('/anular_turno', method=["GET","POST"])
