@@ -16,8 +16,11 @@
       <p>Presione el boton para asignar turnos:</p>
       <button type="button"><a href="/operator/assignation/{{ context.6.operator.userid }}">asignar turno</a></button>
 
-      <p>Presione el boton para reasignar turnos:</p>
-      <button type="button"><a href="/operator/reassignation/{{ context.6.operator.userid }}">reasignacion de turnos</a></button>
+      <p>Presione el boton para listar operadores:</p>
+      <button type="button"><a href="/lista_operadores/{{ context.6.operator.userid }}">Listar Operadores</a></button>
+
+      <p>Presione el boton para listar medicos:</p>
+      <button type="button"><a href="/lista_medicos/{{ context.6.operator.userid }}">Listar Medicos</a></button>
       
       <p>Presione el boton para añadir usuarios:</p>
       <button type="button"><a href="/useradd/{{ context.6.operator.userid }}">Añadir usuarios</a></button>

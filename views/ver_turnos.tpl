@@ -83,6 +83,9 @@ Ingrese DNI del Paciente:
         dataType: "json",
         data: selectedRowInputs
       });
+
+      alert("Turno anulado!!!");
+      location.reload();
     
 
   });
@@ -90,6 +93,7 @@ Ingrese DNI del Paciente:
   $('#reasignar_turno').click( function (e) {
     e.preventDefault();
     var selected = JSON.stringify($('.selected input').serializeArray());
+    var user = window.location.pathname.split('/')[2];
 
 
     
@@ -101,16 +105,14 @@ Ingrese DNI del Paciente:
     
       $.ajax({
         type: "POST",
-        url: "/anular_turno",
+        url: "/reasignar_turno",
         contentType: "application/json",
         dataType: "json",
         data: selected
       });
-
-
-      
+      alert("Turno anulado, redireccionando a reasignacion.");
+      window.location.replace("/operator/assignation/" + user);
   });
-
   
 });
 </script>

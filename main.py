@@ -77,12 +77,20 @@ def medic_assigned():
     pass
 
 
-@route('/entershowoptions', method=["GET","POST"])
-def showdata():
-    postdata = request.body.read()
-    print("salida de datos del post del ajax:")
-    print(postdata.decode('utf8'))     
+@route('/lista_medicos/<ops>', method=["GET","POST"])
+@view('listar_medicos.tpl', template_lookup=['views'])
+def lista_medicos(ops):
+    obj = DBobjects().loadobjects()
     pass
+
+
+@route('/lista_operadores/<ops>', method=["GET","POST"])
+@db_session
+@view('listar_operadores.tpl', template_lookup=['views'])
+def lista_operadores(ops):
+    obj = DBobjects().loadobjects()
+    return dict(context=obj)
+
 
 @route('/anular_turno', method=["GET","POST"])
 @db_session
@@ -91,7 +99,6 @@ def anular_turno():
     dni = json.loads(postdata)[2]
     fecha = json.loads(postdata)[3]
     valor_dni = int(dni['value'])
-    print(fecha['value'])
     query = "a for a in Agenda if a.dni == '{}' and a.date == '{}'".format(valor_dni,fecha['value'])
     cmdquery = select(query)[:]
     paciente_a_anular_turno = cmdquery[0]
@@ -99,23 +106,39 @@ def anular_turno():
     commit()
     pass
 
+
 @route('/reasignar_turno', method=["GET","POST"])
+@db_session
 def reasignar_turno():
-    dato = request.forms.get('reasignar_turno')
-    print(dato)
+    postdata = request.body.read()
+    dni = json.loads(postdata)[2]
+    fecha = json.loads(postdata)[3]
+    valor_dni = int(dni['value'])
+    query = "a for a in Agenda if a.dni == '{}' and a.date == '{}'".format(valor_dni,fecha['value'])
+    cmdquery = select(query)[:]
+    paciente_a_anular_turno = cmdquery[0]
+    paciente_a_anular_turno.state = False
+    commit()
     pass
+
 
 @route('/agregar_especialidad/<ops>', method=["GET","POST"])
 @db_session
 @view('agregar_especialidades.tpl', template_lookup=['views'])
 def agregar_especialidad(ops):
+    try:
+        if not User.get(userid=ops).rol == 'admin':
+            return redirect('/wrongops')
+    except AttributeError:
+        return 'Ingreso no valido, vuelva a la pagina anterior'
+
     if request.forms.get('volver') == "volver":
         return redirect('/operator/{}'.format(ops))
     
     if request.forms.get("name") != None:
         Speciality(name=request.forms.get("name"))
         commit()
-        print("nueva especialidad guardada")
+        return "Se agrego la nueva especialidad: {}, <a href='/agregar_especialidad/{}'>volver a pagina anterior</a>".format(str(request.forms.get("name")),ops)
     pass
 
 
@@ -130,6 +153,12 @@ def turno_asignado():
 @view('ver_turnos.tpl', template_lookup=['views'])
 def ver_turnos(ops):
     """ Medic Main Index """
+    try:
+        if not User.get(userid=ops).rol == 'admin':
+            return redirect('/wrongops')
+    except AttributeError:
+        return 'Ingreso no valido, vuelva a la pagina anterior'
+
     medic = 0
     print(request.forms.get('nombre'))
     try:
