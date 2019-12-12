@@ -13,7 +13,11 @@
 
 
 
-
+<form method="POST">
+    <button type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
+    <button type="submit" name="agregar" value="volver">Añadir operador</a></button>
+    <button type="submit" name="eliminar" value="volver">Eliminar operador</a></button>
+</form>
   <h3>Lista de Operadores</h3>
   <p>Ingrese nombre, apellido o UserID para filtrar:</p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">

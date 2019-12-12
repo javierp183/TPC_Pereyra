@@ -88,11 +88,25 @@ def lista_medicos(ops):
 @db_session
 @view('listar_operadores.tpl', template_lookup=['views'])
 def lista_operadores(ops):
+    try:
+        if not User.get(userid=ops).rol == 'admin':
+            return redirect('/wrongops')
+    except AttributeError:
+        return 'Ingreso no valido, vuelva a la pagina anterior'
     #Obtener lista completa de operadores
     operadores = select(o for o in User if o.rol == 'admin')[:]
     datos_operadores = {'op_data': [o.to_dict() for o in operadores]}
 
+    if request.forms.get('volver') == "volver":
+        return redirect('/operator/{}'.format(ops))
+
+    if request.forms.get('agregar') == "agregar":
+        return redirect('/addoperator/{}'.format(ops))
     
+    if request.forms.get('eliminar') == "eliminar":
+        return redirect('/userdel_operador/{}'.format(ops))
+
+
     return dict(context=datos_operadores)
 
 
