@@ -1,13 +1,26 @@
-<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+      
+      <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+      
 
+  </head>
+  <body>
 
+  
 Ingrese DNI del Paciente:
 <form method="POST">
   DNI: <input type="text" name="dni"><br>
-  <button type="submit" name="buscar" value="buscar">Buscar turno</button>
-  <button type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
+  <button class="btn btn-secondary" type="submit" name="buscar" value="buscar">Buscar turno</button>
+  <button class="btn btn-secondary" type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
 </form>
 
 <p>Recuerde que solo puede anular o reasignar un registro a la vez</p>
@@ -18,7 +31,7 @@ Ingrese DNI del Paciente:
   <input type="hidden" name="_token" value="23523">
   <input type="hidden" name="show_id" value="533">
   <input type="hidden" name="memberId" value="4567">
-  <table id="goatTable" class="display" cellspacing="0" width="100%">
+  <table id="goatTable" class="table table-hover" cellspacing="0" width="100%">
     <thead>
       <tr>
         <th>Nombre</th>
@@ -56,8 +69,8 @@ Ingrese DNI del Paciente:
     {%endfor%}
   </table>
   
-  <button id="anular_turno">Anular turno</button>
-  <button id="reasignar_turno">Reasignar turno</button>
+  <button class="btn btn-primary" id="anular_turno">Anular turno</button>
+  <button class="btn btn-dark" id="reasignar_turno">Reasignar turno</button>
 </form>
 
 <script>
@@ -119,3 +132,9 @@ Ingrese DNI del Paciente:
 </script>
 
 {%endif%}
+
+
+
+  </body>
+</html>
+

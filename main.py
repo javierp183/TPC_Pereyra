@@ -474,9 +474,9 @@ def addpaciente(ops):
             return "Complete todos los campos!, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
         
         if Patient.exists(dni=int(request.forms.get('dni'))):
-            return "El DNI ya esta registrado, registre otro!, <a href='/useradd/{}'>volver atras</a>".format(ops)
+            return "El DNI ya esta registrado, registre otro!, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
         elif Patient.exists(email=str(request.forms.get('email'))):
-            return "El Email ya esta registrado, use otro!, <a href='/useradd/{}'>volver atras</a>".format(ops)
+            return "El Email ya esta registrado, use otro!, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
 
     create = Usermgmt()
     if create.adduser(form_data):
@@ -875,7 +875,7 @@ def assignation(ops):
         admin_user['operator']['name'] = User.get(userid=ops).name
         admin_user['operator']['lastname'] = User.get(userid=ops).lastname
     except AttributeError:
-        return "Ingreso no valido!!!, vuelva atras desde el explorador"
+        return "Ingreso no valido!!!, <a href='/operator/{}'>volver a pagina anterior</a>".format(ops)
 
     if not User.get(userid=ops).rol == 'admin':
         return redirect('/wrongops')

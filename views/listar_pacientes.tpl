@@ -12,16 +12,16 @@
 <body>
 
 <form method="POST">
-    <button type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
-    <button type="submit" name="turnos" value="turnos">Ir a ver turnos</a></button>
-    <button type="submit" name="agregar" value="agregar">Ir a Añadir paciente</a></button>
-    <button type="submit" name="eliminar" value="eliminar">Ir a Eliminar paciente</a></button>
+    <button class="btn btn-secondary" type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
+    <button class="btn btn-secondary" type="submit" name="turnos" value="turnos">Ir a ver turnos</a></button>
+    <button class="btn btn-secondary" type="submit" name="agregar" value="agregar">Ir a Añadir paciente</a></button>
+    <button class="btn btn-secondary" type="submit" name="eliminar" value="eliminar">Ir a Eliminar paciente</a></button>
 </form>
   <h3>Lista de Pacientes registrados en el sistema</h3>
   <p>Ingrese nombre, apellido o UserID para filtrar:</p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
   <br>
-  <table class="table table-bordered">
+  <table class="table table-dark table-bordered" >
     <thead>
       <tr>
         <th>Nombre y Apellido</th>

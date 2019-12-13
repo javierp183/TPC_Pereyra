@@ -14,15 +14,15 @@
 
 
 <form method="POST">
-    <button type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
-    <button type="submit" name="agregar" value="agregar"> Ir a añadir usuario medico</a></button>
-    <button type="submit" name="eliminar" value="eliminar">Ir a eliminar usuario medico</a></button>
+    <button class="btn btn-secondary" type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
+    <button class="btn btn-secondary" type="submit" name="agregar" value="agregar"> Ir a añadir usuario medico</a></button>
+    <button class="btn btn-secondary" type="submit" name="eliminar" value="eliminar">Ir a eliminar usuario medico</a></button>
 </form>
   <h3>Lista de Medicos registrados en el sistema</h3>
   <p>Ingrese nombre, apellido o UserID para filtrar:</p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
   <br>
-  <table class="table table-bordered">
+  <table class="table table-dark table-bordered">
     <thead>
       <tr>
         <th>Nombre y Apellido</th>
