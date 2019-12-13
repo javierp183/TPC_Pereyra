@@ -21,6 +21,9 @@
 
       <p>Presione el boton para listar medicos:</p>
       <button type="button"><a href="/lista_medicos/{{ context.6.operator.userid }}">Listar Medicos</a></button>
+
+      <p>Presione el boton para listar pacientes:</p>
+      <button type="button"><a href="/lista_pacientes/{{ context.6.operator.userid }}">Listar Pacientes</a></button>
       
       <p>Presione el boton para añadir usuarios:</p>
       <button type="button"><a href="/useradd/{{ context.6.operator.userid }}">Añadir usuarios</a></button>

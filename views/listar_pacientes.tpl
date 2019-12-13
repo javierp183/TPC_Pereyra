@@ -11,14 +11,13 @@
 </head>
 <body>
 
-
-
 <form method="POST">
     <button type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
-    <button type="submit" name="agregar" value="agregar"> Ir a añadir usuario medico</a></button>
-    <button type="submit" name="eliminar" value="eliminar">Ir a eliminar usuario medico</a></button>
+    <button type="submit" name="turnos" value="turnos">Ir a ver turnos</a></button>
+    <button type="submit" name="agregar" value="agregar">Ir a Añadir paciente</a></button>
+    <button type="submit" name="eliminar" value="eliminar">Ir a Eliminar paciente</a></button>
 </form>
-  <h3>Lista de Medicos registrados en el sistema</h3>
+  <h3>Lista de Pacientes registrados en el sistema</h3>
   <p>Ingrese nombre, apellido o UserID para filtrar:</p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
   <br>
@@ -26,26 +25,25 @@
     <thead>
       <tr>
         <th>Nombre y Apellido</th>
-
-        <th>UserID</th>
-        <th>ID Medico</th>
+        <th>DNI</th>
+        <th>email</th>
       </tr>
     </thead>
     <tbody id="myTable">
-        {%for data in context.medico_data%}
-        {%set nombres = data['name']%}
-        {%set apellidos = data['lastname']%}
-        {%set userid = data['userid']%}
-        {%set medicid = data['medicid']%}
+      {%for data in context.pacientes_data%}
+      {%set nombres = data['name']%}
+      {%set apellidos = data['lastname']%}
+      {%set dni = data['dni']%}
+      {%set emails = data['email']%}
         <tr>
         <td>
-            {{ nombres }} {{ apellidos }}
+          {{ nombres }} {{ apellidos }}
         </td>
         <td>
-           {{ userid }}
+          {{ dni }}
         </td>
         <td>
-                {{ medicid }}
+          {{ emails }}
         </td>
         </tr>
         {%endfor%}

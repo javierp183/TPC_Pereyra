@@ -429,6 +429,16 @@ class Assignation:
         except IndexError:
             return "error"
 
+        
+        print("salida 2")
+        #Me trae el medico segun especialidad        
+        if obj.medico.speciality.name == data['ingreso0']:
+            print("ok")
+        else:
+            query = "m for m in Medic if m.speciality.name == '{}'".format(data['ingreso0'])
+            medico = select(query)[:]
+            medico_posta = medico[0]
+
 
         # Valida si el estado del medico se encuentra disponible.
         if obj.state == False:
@@ -442,6 +452,7 @@ class Assignation:
             obj.patient = p
             obj.comments = comment
             obj.state = 1
+            obj.medico = medico_posta.id
 
             #Obtengo nombre del medico
             nombre_medico = obj.medico.name

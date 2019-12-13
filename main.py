@@ -78,11 +78,60 @@ def medic_assigned():
 
 
 @route('/lista_medicos/<ops>', method=["GET","POST"])
+@db_session
 @view('listar_medicos.tpl', template_lookup=['views'])
 def lista_medicos(ops):
-    obj = DBobjects().loadobjects()
-    pass
+    datos_medicos = DBobjects().loadobjects()
+    try:
+        if not User.get(userid=ops).rol == 'admin':
+            return redirect('/wrongops')
+    except AttributeError:
+        return 'Ingreso no valido, vuelva a la pagina anterior'
+    #Obtener lista de usuarios medicos
+    usuariosmedicos = select(o for o in User if o.rol == 'medic')[:]
+    datos_medicos = {'medico_data': [o.to_dict() for o in usuariosmedicos]}
 
+    if request.method == 'POST':
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
+
+        if request.forms.get('agregar') == "agregar":
+            return redirect('/addmedic/{}'.format(ops))
+    
+        if request.forms.get('eliminar') == "eliminar":
+            return redirect('/userdel/{}'.format(ops))
+
+
+    return dict(context=datos_medicos)
+
+@route('/lista_pacientes/<ops>', method=["GET","POST"])
+@db_session
+@view('listar_pacientes.tpl', template_lookup=['views'])
+def lista_medicos(ops):
+    try:
+        if not User.get(userid=ops).rol == 'admin':
+            return redirect('/wrongops')
+    except AttributeError:
+        return 'Ingreso no valido, vuelva a la pagina anterior'
+    #Obtener lista de usuarios medicos
+    usuariospacientes = select(p for p in Patient)[:]
+    datos_pacientes = {'pacientes_data': [o.to_dict() for o in usuariospacientes]}
+
+    if request.method == 'POST':
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
+
+        if request.forms.get('agregar') == "agregar":
+            return redirect('/addpaciente/{}'.format(ops))
+    
+        if request.forms.get('eliminar') == "eliminar":
+            return redirect('/userdel_paciente/{}'.format(ops))
+        
+        if request.forms.get('turnos') == "turnos":
+            return redirect('/ver_turnos/{}'.format(ops))
+
+
+    return dict(context=datos_pacientes)
 
 @route('/lista_operadores/<ops>', method=["GET","POST"])
 @db_session
@@ -97,14 +146,15 @@ def lista_operadores(ops):
     operadores = select(o for o in User if o.rol == 'admin')[:]
     datos_operadores = {'op_data': [o.to_dict() for o in operadores]}
 
-    if request.forms.get('volver') == "volver":
-        return redirect('/operator/{}'.format(ops))
+    if request.method == 'POST':
+        if request.forms.get('volver') == "volver":
+            return redirect('/operator/{}'.format(ops))
 
-    if request.forms.get('agregar') == "agregar":
-        return redirect('/addoperator/{}'.format(ops))
+        if request.forms.get('agregar') == "agregar":
+            return redirect('/addoperator/{}'.format(ops))
     
-    if request.forms.get('eliminar') == "eliminar":
-        return redirect('/userdel_operador/{}'.format(ops))
+        if request.forms.get('eliminar') == "eliminar":
+            return redirect('/userdel_operador/{}'.format(ops))
 
 
     return dict(context=datos_operadores)

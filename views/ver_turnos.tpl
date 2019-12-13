@@ -10,6 +10,7 @@ Ingrese DNI del Paciente:
   <button type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
 </form>
 
+<p>Recuerde que solo puede anular o reasignar un registro a la vez</p>
 {%if context is defined%}
 
 <form method="POST">
