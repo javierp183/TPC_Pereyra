@@ -875,7 +875,7 @@ def assignation(ops):
         admin_user['operator']['name'] = User.get(userid=ops).name
         admin_user['operator']['lastname'] = User.get(userid=ops).lastname
     except AttributeError:
-        return "Ingreso no valido!!!, <a href='/operator/{}'>volver a pagina anterior</a>".format(ops)
+        return "Ingreso no valido!!!, <a href='/operator/assignation/{}'>volver a pagina anterior</a>".format(ops)
 
     if not User.get(userid=ops).rol == 'admin':
         return redirect('/wrongops')
@@ -910,7 +910,7 @@ def assignation(ops):
                     print("test 2")
                     return template('turno_asignado.tpl', context=ops)
                 elif out == "error":
-                    return "Horario o entrada no valido, vuelva atras, actualize e ingrese un horario valido, <a href='/operator/{}'>volver atras</a>".format(ops)
+                    return "Horario o entrada no valido, vuelva atras, actualize e ingrese un horario valido, <a href='/operator/assignation/{}'>volver atras</a>".format(ops)
         else:
             print(" test re loco ")
     except AttributeError:
