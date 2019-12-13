@@ -204,9 +204,12 @@ def agregar_especialidad(ops):
         return redirect('/operator/{}'.format(ops))
     
     if request.forms.get("name") != None:
-        Speciality(name=request.forms.get("name"))
-        commit()
-        return "Se agrego la nueva especialidad: {}, <a href='/agregar_especialidad/{}'>volver a pagina anterior</a>".format(str(request.forms.get("name")),ops)
+        if Speciality.exists(name=request.forms.get("name").lower()) == False:
+            Speciality(name=request.forms.get("name").lower())
+            commit()
+            return "Se agrego la nueva especialidad: {}, <a href='/agregar_especialidad/{}'>volver a pagina anterior</a>".format(str(request.forms.get("name")).lower(),ops)
+        else:
+            return "Esta especilidad ya existe: {}, <a href='/agregar_especialidad/{}'>volver a pagina anterior</a>".format(str(request.forms.get("name")).lower(),ops)
     pass
 
 
