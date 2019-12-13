@@ -642,8 +642,11 @@ def main_userdel_paciente_index(ops):
         if request.method == 'POST':
             print("test")
             dni = request.forms.get('dni')
+            print("numero de dni:")
+            print(dni)
             if Patient.exists(dni=dni):
-                obj = User.get(dni=dni)
+                print("existe el usuario!!!")
+                obj = Patient.get(dni=dni)
                 nombre = obj.name
                 apellido = obj.lastname
                 obj.delete()

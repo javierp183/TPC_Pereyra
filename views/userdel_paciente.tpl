@@ -11,7 +11,7 @@
 
 Ingrese DNI: <br>
 <form method="POST">
-    UserID: <input type="text" name="userid"><br>
+    DNI: <input type="text" name="dni"><br>
 </table>
 
 <button type="submit">Eliminar Paciente</button>
