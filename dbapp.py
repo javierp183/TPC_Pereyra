@@ -420,6 +420,9 @@ class Assignation:
         inc = 0
         print(data)
 
+        query = "m for m in Medic if m.speciality.name == '{}'".format(data['ingreso0'])
+        medico = select(query)[:]
+        medico_posta = medico[0]
 
 
         query = "a for a in Agenda if a.date == '{}' and a.medico.medicid == '{}' and a.hour == '{}'".format(date, idmedic, hour)
