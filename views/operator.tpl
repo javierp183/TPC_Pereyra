@@ -43,10 +43,11 @@
 </table>
 
 <div class="container">
-    <p>Menu de opciones</p>            
+    <p><font color="red"><b>Menu de opciones</b></font></p>            
     <table class="table table-dark table-hover">
       <thead>
         <tr>
+            Menu de opciones
         </tr>
       </thead>
       <tbody>
