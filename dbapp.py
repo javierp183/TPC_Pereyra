@@ -524,6 +524,7 @@ class Assignation:
         return data
     
     def buscarpacienteporturno(self,dni):
+        print("dni desde la funcion:")
         print(dni)
         turno_paciente = {
             'nombre': [],
@@ -540,8 +541,12 @@ class Assignation:
 
         query = "a for a in Agenda if a.dni == '{}' and a.state == True".format(dni)
         cmdquery = select(query)[:]
-        print(cmdquery)
+        print("despues del query")
         for i in cmdquery:
+            print(i.patient)
+        
+        for i in cmdquery:
+            print("dentro del for")
             turno_paciente['nombre'].append(i.patient.name)
             turno_paciente['apellido'].append(i.patient.lastname)
             turno_paciente['fecha'].append(i.date)
@@ -550,7 +555,9 @@ class Assignation:
             turno_paciente['apellidomedico'].append(i.medico.lastname)
             turno_paciente['especialidad'].append(i.medico.speciality.name)
             turno_paciente['dni'].append(i.patient.dni)
-
+        
+        print("salida del dict")
+        print(turno_paciente)
         return turno_paciente
 
 

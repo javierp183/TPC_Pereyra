@@ -234,9 +234,12 @@ def ver_turnos(ops):
     print(request.forms.get('nombre'))
     try:
         if request.method == 'POST':
+            print
             if request.forms.get('buscar') == "buscar":
                 turno = request.forms.get("dni")
+                print("ingreso de turno:")
                 turno = int(turno)
+                print("dni del paciente desde el main:")
                 print(turno)
                 return dict(context=Assignation().buscarpacienteporturno(turno))
     except:
@@ -480,9 +483,7 @@ def addpaciente(ops):
 
     create = Usermgmt()
     if create.adduser(form_data):
-        return "Paciente creado"
-    
-    print(form_data)
+        return "Paciente creado, <a href='/addpaciente/{}'>volver atras</a>".format(ops)
 
 # --------------------------------------------------------------------------- #
 # Application Main Routes
