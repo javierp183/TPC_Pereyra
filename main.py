@@ -28,9 +28,15 @@
 # Imports
 # --------------------------------------------------------------------------- #
 
+# AI image Engine
+from imageai.Prediction import ImagePrediction
+
 # Database
 from pony.orm import db_session, select
 from pony.orm import commit,select
+
+# System
+import os
 
 # Framework
 from bottle import jinja2_view as view
@@ -67,6 +73,17 @@ now = datetime.datetime.now()
 def server_static(filepath):
     return static_file(filepath, root='static')
 
+def deteccion_de_persona(imagen):
+    execution_path = os.getcwd()
+    prediction = ImagePrediction()
+    prediction.setModelTypeAsResNet()
+    prediction.setModelPath( execution_path + "/resnet50_weights_tf_dim_ordering_tf_kernels.h5")
+    prediction.loadModel()
+
+    predictions, percentage_probabilities = prediction.predictImage(imagen, result_count=5)
+    for index in range(len(predictions)):
+        print(predictions[index] , " : " , percentage_probabilities[index])
+
 # --------------------------------------------------------------------------- #
 # Function - Helpers - Render output
 # --------------------------------------------------------------------------- #
@@ -75,6 +92,31 @@ def server_static(filepath):
 @view('medic_assigned.tpl', template_lookup=['views'])
 def medic_assigned():
     pass
+
+
+@route('/upload/<ops>/<newops>', method='POST')
+def do_upload(ops,newops):
+    
+    category = request.forms.get('category')
+    upload = request.files.get('upload')
+    dirpath = os.getcwd()
+    print("directorio actual:")
+    name, ext = os.path.splitext(upload.filename)
+    if ext not in ('.jpg'):
+        return "Extension del archivo, no soportada!"
+    
+    upload.filename = newops + ".jpg"
+
+    save_path = "TPC_jpereyra/static/img/".format(category=category)
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
+    file_path = dirpath + "/static/img/{file}".format(file=upload.filename)
+    print(file_path)
+    upload.save(file_path)
+    
+    return "Usuario generado, <a href='/addoperator/{}'>volver atras</a>".format(ops)
+    #return "File successfully saved to '{0}'.".format(save_path)
 
 
 @route('/lista_medicos/<ops>', method=["GET","POST"])
@@ -224,6 +266,7 @@ def turno_asignado():
 @view('ver_turnos.tpl', template_lookup=['views'])
 def ver_turnos(ops):
     """ Medic Main Index """
+
     try:
         if not User.get(userid=ops).rol == 'admin':
             return redirect('/wrongops')
@@ -253,10 +296,15 @@ def ver_turnos(ops):
 
 
 
-@route('/medicanonssigned')
-@view('medic_non_assigned.tpl', template_lookup=['views'])
-def medic_non_assigned():
-    pass
+@route('/subir_foto/<ops>/<newops>', method=["GET","POST"])
+@view('subir_foto.tpl', template_lookup=['views'])
+def medic_non_assigned(ops,newops):
+    data = {}
+    data['ops'] = ops
+    data['newops'] = newops
+
+    return dict(context=data)
+
 
 @route('/wronguserpass')
 @view('wronguserpass.tpl', template_lookup=['views'])
@@ -367,7 +415,10 @@ def addmedic(ops):
 
     create = Usermgmt()
     if create.adduser(form_data):
-        return "Usuario creado!!!, <a href='/useradd/{}'>volver atras</a>".format(ops)
+        if request.forms.get('foto') == 'on':
+            return redirect('/subir_foto/{}'.format(ops))
+        else:
+            return "Usuario creado!!!, <a href='/useradd/{}'>volver atras</a>".format(ops)
     
     return dict(context=obj)
 
@@ -423,7 +474,10 @@ def addoperator(ops):
 
     create = Usermgmt()
     if create.adduser(form_data):
-        return "Usuario operador creado, <a href='/addoperator/{}'>volver atras</a>".format(ops)
+        if request.forms.get('foto') == 'on':
+            return redirect('/subir_foto/{}/{}'.format(ops,form_data['userid']))
+        else:
+            return "Usuario operador creado, <a href='/addoperator/{}'>volver atras</a>".format(ops)
     
     print(form_data)
 
@@ -615,7 +669,10 @@ def main_useradd_index(ops):
     
     create = Usermgmt()
     if create.adduser(form_data):
-        return "Usuario creado, <a href='/useradd/{}'>volver atras</a>".format(ops)
+        if request.forms.get('foto') == 'on':
+            return redirect('/busir_foto/{}'.format(ops))
+        else:
+            return "Usuario creado, <a href='/useradd/{}'>volver atras</a>".format(ops)
 
 
     return dict(context=obj)
@@ -746,6 +803,7 @@ def main_userdel_index(ops):
 @view('medic.tpl', template_lookup=['views'])
 def main_doctor_index(medicid):
     """ Medic Main Index """
+    c = 0
     try:
         if User.get(medicid=medicid).rol == 'medic':
             print("este es un usuario medico")
@@ -756,6 +814,12 @@ def main_doctor_index(medicid):
 
     dbdata = DBobjects().loadobjects()
     medic = Assignation.medicagenda(medicid,dbdata)
+    for count in medic['patients']['name']:
+        c = c + 1
+        print(c)
+    
+    medic['turnos'] = c
+
     estado_salida = dict(request.params)
 
     if request.method == 'POST':

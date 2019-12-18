@@ -110,7 +110,8 @@
     <input type="checkbox" name="{{ i.name }}" value="{{ i.name }}">{{ i.name }}
     {%endfor%} 
     <br>
-    
+
+    Subir Foto? <input type="checkbox" name="foto"><br>
     <button type="submit">Ingresar medico</button>
     
     </form>  

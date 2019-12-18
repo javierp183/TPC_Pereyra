@@ -18,21 +18,28 @@
         Nombre y Apellido del Operador
       </th>
       <th>
-        Usuario
+        Usuario 
+      </th>
+      <th>
+        Operador
       </th>
     </tr>
     </thead>
     <tbody>
       <tr>
         <td>
-            {{ context.6.operator.name }} {{ context.6.operator.lastname }}
+            {{ context.6.operator.name }} {{ context.6.operator.lastname }} 
         </td>
         <td>
-            {{ context.6.operator.userid }}
+            {{ context.6.operator.userid }} 
+        </td>
+        <td>
+            <img src="/static/img/{{ context.6.operator.userid }}.jpg"  height="60" width="60">
+
         </td>
       </tr>
     </tbody>
-  </table>
+</table>
 
 <table>
 <tr>

@@ -31,6 +31,7 @@
         Usuario del sistema ( USERID ): <input type="text" name="userid"><br>
         ID del Medico: <input type="text" name="medicid"><br>
         Clave para el Usuario: <input type="password" name="password"><br>
+        Subir Foto? <input type="checkbox" name="foto"><br>
       Dias de trabajo <br>
     <table class="table table-dark">
         <thead>

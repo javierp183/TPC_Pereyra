@@ -11,20 +11,20 @@
 </head>
 <body>
 
-
-
 <div class="container mt-3">
-    <table>
+    <table class="table table-dark">
         <tr>
-          <th>Nombre del medico:</th>
+          <th>Nombre y Apellido del medico:</th>
           <th>ID del medico:</th>
+          <th>Turnos asignados</th>
         </tr>
         <tr>
           <td>{{ context.medic.name }} {{ context.medic.lastname }}</td>
           <td>{{ context.medic.medicid }}</td>
-          <td>{{ context.medic.speciality }}</td
+          <td>{{ context.turnos }}</td>
         </tr>
     </table>
+  
   <h3>Pacientes</h3>
   <p>Ingrese dni, comentario o fechas para filtrar:</p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">

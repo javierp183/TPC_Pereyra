@@ -12,7 +12,6 @@
 <body>
 
 
-
 <form method="POST">
     <button class="btn btn-secondary" type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>
     <button class="btn btn-secondary" type="submit" name="agregar" value="agregar"> Ir a añadir usuario medico</a></button>

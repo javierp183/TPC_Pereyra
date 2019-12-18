@@ -7,7 +7,7 @@
   <button type="submit" name="operador" value="operador">Ingreso de operador</button>
   <button type="submit" name="paciente" value="paciente">Ingreso de paciente</button>
   <button type="submit" name="volver" value="volver">Volver atras</a></button>
-  </form>
+</form>
 
 Datos del Operador: <br>
 <form method="POST">
@@ -15,8 +15,9 @@ Datos del Operador: <br>
     Apellido: <input type="text" name="lastname"><br>
     UserID: <input type="text" name="userid"><br>
     Clave para el Usuario: <input type="password" name="password"><br>
+    Subir Foto? <input type="checkbox" name="foto"><br>
 </table>
-
-<button type="submit">Ingresar operador</button>
-
+<button type="submit">Ingresar operador</button><br>
 </form>
+
+

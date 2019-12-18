@@ -15,6 +15,6 @@ Datos del Paciente
     Apellido: <input type="text" name="lastname"><br>
     DNI: <input type="text" name="dni"><br>
     EMAIL: <input type="text" name="email"><br>
-<button type="submit">Ingresar Paciente</button>
-
+  </table>
+  <button type="submit">Ingresar paciente</button><br>
 </form>
