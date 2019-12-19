@@ -13,6 +13,36 @@
 <body>
 
 
+<table class="table table-dark">
+    <thead>
+      <tr>
+        <th>
+          Nombre y Apellido del Operador
+        </th>
+        <th>
+          Usuario 
+        </th>
+        <th>
+          Operador
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {{ context.operador.operator.name }} {{ context.operador.operator.lastname }}
+          </td>
+          <td>
+              {{ context.operador.operator.userid }}
+          </td>
+          <td>
+             
+              <img src="/static/img/{{ context.operador.operator.userid }}.jpg"  height="60" width="60">
+
+          </td>
+        </tr>
+      </tbody>
+  </table>
 
 <form method="POST">
     <button class="btn btn-secondary" type="submit" name="volver" value="volver">Volver a pagina anterior</a></button>

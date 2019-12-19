@@ -133,6 +133,19 @@ def lista_medicos(ops):
     usuariosmedicos = select(o for o in User if o.rol == 'medic')[:]
     datos_medicos = {'medico_data': [o.to_dict() for o in usuariosmedicos]}
 
+    medic = {
+        'operator':{
+            'name':'',
+            'lastname':'',
+            'userid': ''
+        }
+    }
+    operator = User.get(userid=ops)
+    medic['operator']['name'] = operator.name
+    medic['operator']['lastname'] = operator.lastname
+    medic['operator']['userid'] = operator.userid
+    datos_medicos['operador'] = medic
+
     if request.method == 'POST':
         if request.forms.get('volver') == "volver":
             return redirect('/operator/{}'.format(ops))
@@ -158,6 +171,19 @@ def lista_medicos(ops):
     #Obtener lista de usuarios medicos
     usuariospacientes = select(p for p in Patient)[:]
     datos_pacientes = {'pacientes_data': [o.to_dict() for o in usuariospacientes]}
+
+    medic = {
+        'operator':{
+            'name':'',
+            'lastname':'',
+            'userid': ''
+        }
+    }
+    operator = User.get(userid=ops)
+    medic['operator']['name'] = operator.name
+    medic['operator']['lastname'] = operator.lastname
+    medic['operator']['userid'] = operator.userid
+    datos_pacientes['operador'] = medic
 
     if request.method == 'POST':
         if request.forms.get('volver') == "volver":
@@ -187,6 +213,21 @@ def lista_operadores(ops):
     #Obtener lista completa de operadores
     operadores = select(o for o in User if o.rol == 'admin')[:]
     datos_operadores = {'op_data': [o.to_dict() for o in operadores]}
+
+    medic = {
+        'operator':{
+            'name':'',
+            'lastname':'',
+            'userid': ''
+        }
+    }
+    operator = User.get(userid=ops)
+    medic['operator']['name'] = operator.name
+    medic['operator']['lastname'] = operator.lastname
+    medic['operator']['userid'] = operator.userid
+    datos_operadores['operador'] = medic
+
+
 
     if request.method == 'POST':
         if request.forms.get('volver') == "volver":
@@ -272,18 +313,26 @@ def ver_turnos(ops):
             return redirect('/wrongops')
     except AttributeError:
         return 'Ingreso no valido, vuelva a la pagina anterior'
+    
 
-    medic = 0
-    print(request.forms.get('nombre'))
+
+    medic = {
+        'operator': {
+            'name': '',
+            'lastname':'',
+            'userid': ''
+        }
+    }
+    operator = User.get(userid=ops)
+    medic['state'] = 0
+    medic['operator']['name'] = operator.name
+    medic['operator']['lastname'] = operator.lastname
+    medic['operator']['userid'] = operator.userid
     try:
         if request.method == 'POST':
-            print
             if request.forms.get('buscar') == "buscar":
                 turno = request.forms.get("dni")
-                print("ingreso de turno:")
                 turno = int(turno)
-                print("dni del paciente desde el main:")
-                print(turno)
                 return dict(context=Assignation().buscarpacienteporturno(turno))
     except:
         return "Ingrese un Turno valido!!!, <a href='/ver_turnos/{}'>volver atras</a>".format(ops)
