@@ -15,36 +15,7 @@
   </head>
   <body>
 
-<table class="table table-dark">
-    <thead>
-      <tr>
-        <th>
-          Nombre y Apellido del Operador
-        </th>
-        <th>
-          Usuario 
-        </th>
-        <th>
-          Operador
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-              {{ context.operator.name }} {{ context.operator.lastname }}
-          </td>
-          <td>
-              {{ context.operator.userid }}
-          </td>
-          <td>
-              <img src="/static/img/{{ context.operator.userid }}.jpg"  height="60" width="60">
 
-          </td>
-        </tr>
-      </tbody>
-  </table>
-  
 Ingrese DNI del Paciente:
 <form method="POST">
   DNI: <input type="text" name="dni"><br>
@@ -53,7 +24,7 @@ Ingrese DNI del Paciente:
 </form>
 
 <p>Recuerde que solo puede anular o reasignar un registro a la vez</p>
-{%if context.state is defined%}
+{%if context is defined%}
 
 <form method="POST">
 

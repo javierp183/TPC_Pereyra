@@ -314,20 +314,7 @@ def ver_turnos(ops):
     except AttributeError:
         return 'Ingreso no valido, vuelva a la pagina anterior'
     
-
-
-    medic = {
-        'operator': {
-            'name': '',
-            'lastname':'',
-            'userid': ''
-        }
-    }
-    operator = User.get(userid=ops)
-    medic['state'] = 0
-    medic['operator']['name'] = operator.name
-    medic['operator']['lastname'] = operator.lastname
-    medic['operator']['userid'] = operator.userid
+    medic = 0
     try:
         if request.method == 'POST':
             if request.forms.get('buscar') == "buscar":
@@ -747,17 +734,21 @@ def main_userdel_paciente_index(ops):
             return redirect('/userdel/{}'.format(ops))
         
         if request.method == 'POST':
-            print("test")
             dni = request.forms.get('dni')
-            print("numero de dni:")
-            print(dni)
             if Patient.exists(dni=dni):
-                print("existe el usuario!!!")
                 obj = Patient.get(dni=dni)
                 nombre = obj.name
                 apellido = obj.lastname
                 obj.delete()
+                query = "a for a in Agenda if a.dni == '{}'".format(int(dni))
+                cmdquery = select(query)[:]
+                print(cmdquery)
+
+                for disable in cmdquery:
+                    print("deshabilitando todos los turnos del usuario")
+                    disable.state = False
                 commit()
+
                 return "Paciente {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
             else:
                 return "El DNI no existe!, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
