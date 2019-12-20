@@ -805,6 +805,10 @@ def main_userdel_operador_index(ops):
         print("este es un usuario admin")
     else:
         return redirect('/wrongops')
+    
+    dirpath = os.getcwd()
+
+    print("this is atest")
 
     try:
         if request.forms.get('volver') == "volver":
@@ -816,6 +820,7 @@ def main_userdel_operador_index(ops):
         elif request.forms.get('medico') == "medico":
             return redirect('/userdel/{}'.format(ops))
         
+        
         if request.method == 'POST':
             print("test")
             userid = request.forms.get('userid')
@@ -826,6 +831,15 @@ def main_userdel_operador_index(ops):
                 apellido = obj.lastname
                 obj.delete()
                 commit()
+                print("another test")
+                myfile = dirpath + '/static/img/' + userid + '.jpg'
+                print(myfile)
+                print(Path(myfile).is_file())
+                if Path(myfile).is_file():
+                    print("another, another test")
+                    print("borrando archivo")
+                    print(dirpath + '/static/img/' + userid + '.jpg')
+                    os.remove(dirpath + '/static/img/' + userid + '.jpg')
                 return "Operador {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
             else:
                 return "El USERID no existe!, <a href='/userdel_operador/{}'>volver atras</a>".format(ops)
@@ -863,6 +877,7 @@ def main_userdel_index(ops):
                 apellido = obj.lastname
                 obj.delete()
                 commit()
+
                 return "Medico {} {} borrado del sistema, <a href='/userdel/{}'>volver atras</a>".format(nombre,apellido,ops)
             else:
                 return "El MEDICID no existe!, <a href='/userdel/{}'>volver atras</a>".format(ops)
