@@ -31,6 +31,9 @@
 # AI image Engine
 from imageai.Prediction import ImagePrediction
 
+#File paths
+from pathlib import Path
+
 # Database
 from pony.orm import db_session, select
 from pony.orm import commit,select
@@ -137,7 +140,8 @@ def lista_medicos(ops):
         'operator':{
             'name':'',
             'lastname':'',
-            'userid': ''
+            'userid': '',
+            'status':[]
         }
     }
     operator = User.get(userid=ops)
@@ -145,6 +149,17 @@ def lista_medicos(ops):
     medic['operator']['lastname'] = operator.lastname
     medic['operator']['userid'] = operator.userid
     datos_medicos['operador'] = medic
+
+    dirpath = os.getcwd()
+
+    file_state = {
+        'fstatus': False
+    }
+
+    if Path(dirpath + '/static/img/' + ops + '.jpg').is_file():
+        file_state['fstatus'] = True
+    
+    medic['operator']['status'].append(file_state)
 
     if request.method == 'POST':
         if request.forms.get('volver') == "volver":
@@ -176,7 +191,8 @@ def lista_medicos(ops):
         'operator':{
             'name':'',
             'lastname':'',
-            'userid': ''
+            'userid': '',
+            'status':[]
         }
     }
     operator = User.get(userid=ops)
@@ -184,6 +200,17 @@ def lista_medicos(ops):
     medic['operator']['lastname'] = operator.lastname
     medic['operator']['userid'] = operator.userid
     datos_pacientes['operador'] = medic
+
+    dirpath = os.getcwd()
+
+    file_state = {
+        'fstatus': False
+    }
+
+    if Path(dirpath + '/static/img/' + ops + '.jpg').is_file():
+        file_state['fstatus'] = True
+    
+    medic['operator']['status'].append(file_state)
 
     if request.method == 'POST':
         if request.forms.get('volver') == "volver":
@@ -218,7 +245,8 @@ def lista_operadores(ops):
         'operator':{
             'name':'',
             'lastname':'',
-            'userid': ''
+            'userid': '',
+            'status': []
         }
     }
     operator = User.get(userid=ops)
@@ -226,6 +254,18 @@ def lista_operadores(ops):
     medic['operator']['lastname'] = operator.lastname
     medic['operator']['userid'] = operator.userid
     datos_operadores['operador'] = medic
+
+
+    dirpath = os.getcwd()
+
+    file_state = {
+        'fstatus': False
+    }
+
+    if Path(dirpath + '/static/img/' + ops + '.jpg').is_file():
+        file_state['fstatus'] = True
+    
+    medic['operator']['status'].append(file_state)
 
 
 
@@ -914,7 +954,16 @@ def main_operator_index(ops):
     data.append(admin_user)
     ingresos['ingreso1'] = 0
     data.append(ingresos)
+    dirpath = os.getcwd()
 
+    file_state = {
+        'fstatus': False
+    }
+
+    if Path(dirpath + '/static/img/' + ops + '.jpg').is_file():
+        file_state['fstatus'] = True
+    
+    data.append(file_state)
 
     try:
         if request.method == 'POST':
@@ -991,6 +1040,17 @@ def assignation(ops):
     data.append(admin_user)
     ingresos['ingreso1'] = 0
     data.append(ingresos)
+
+    dirpath = os.getcwd()
+
+    file_state = {
+        'fstatus': False
+    }
+
+    if Path(dirpath + '/static/img/' + ops + '.jpg').is_file():
+        file_state['fstatus'] = True
+    
+    data.append(file_state)
 
 
     try:

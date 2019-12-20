@@ -34,9 +34,11 @@
                   {{ context.operador.operator.userid }}
               </td>
               <td>
-                 
+                {% if context.operador.operator.status.0.fstatus == True %}
                   <img src="/static/img/{{ context.operador.operator.userid }}.jpg"  height="60" width="60">
-    
+                {%else%}
+                no hay foto
+                {%endif%}
               </td>
             </tr>
           </tbody>
